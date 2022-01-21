@@ -2,6 +2,7 @@ package com.lucaskoch.firebasecrud;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -27,6 +30,7 @@ public class RegistrationActivity extends AppCompatActivity {
     ProgressBar idPBLoading;
     FirebaseAuth mAuth;
     TextView idTVLogin;
+    SwipeRefreshLayout swipeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,23 @@ public class RegistrationActivity extends AppCompatActivity {
         idEdtUserConfirmPassword = findViewById(R.id.idEdtUserConfirmPassword);
         idPBLoading = findViewById(R.id.idPBLoading);
         idTVLogin = findViewById(R.id.idTVLogin);
+
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                //Do your task
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        swipeLayout.setRefreshing(false);
+                    }
+                }, 1000L);
+
+
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
         idTVLogin.setOnClickListener(new View.OnClickListener() {

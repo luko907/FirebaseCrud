@@ -2,6 +2,7 @@ package com.lucaskoch.firebasecrud;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,15 +22,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LoginActivity extends AppCompatActivity {
 
-     TextInputEditText idEdtUserName,idEdtUserPassword;
-     Button idbtnLogin;
-     ProgressBar idPBLoading;
-     TextView idTVRegister;
-     FirebaseAuth mAuth;
-
+    TextInputEditText idEdtUserName, idEdtUserPassword;
+    Button idbtnLogin;
+    ProgressBar idPBLoading;
+    TextView idTVRegister;
+    FirebaseAuth mAuth;
+    SwipeRefreshLayout swipeLayout;
 
 
     @Override
@@ -41,8 +44,24 @@ public class LoginActivity extends AppCompatActivity {
         idEdtUserPassword = findViewById(R.id.idEdtUserPassword);
         idbtnLogin = findViewById(R.id.idbtnLogin);
         idPBLoading = findViewById(R.id.idPBLoading);
-        idTVRegister= findViewById(R.id.idTVRegister);
+        idTVRegister = findViewById(R.id.idTVRegister);
         mAuth = FirebaseAuth.getInstance();
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                //Do your task
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        swipeLayout.setRefreshing(false);
+                    }
+                }, 1000L);
+
+
+            }
+        });
 
         idTVRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,20 +77,20 @@ public class LoginActivity extends AppCompatActivity {
                 idPBLoading.setVisibility(View.VISIBLE);
                 String userName = Objects.requireNonNull(idEdtUserName.getText()).toString();
                 String pwd = Objects.requireNonNull(idEdtUserPassword.getText()).toString();
-                if(TextUtils.isEmpty(userName) && TextUtils.isEmpty(pwd)){
+                if (TextUtils.isEmpty(userName) && TextUtils.isEmpty(pwd)) {
                     Toast.makeText(LoginActivity.this, "Please enter your credentials", Toast.LENGTH_SHORT).show();
                     idPBLoading.setVisibility(View.GONE);
-                }else{
-                    mAuth.signInWithEmailAndPassword(userName,pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                } else {
+                    mAuth.signInWithEmailAndPassword(userName, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 idPBLoading.setVisibility(View.GONE);
                                 Toast.makeText(LoginActivity.this, "Login Succesful", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(i);
                                 finish();
-                            }else{
+                            } else {
                                 idPBLoading.setVisibility(View.GONE);
                                 Toast.makeText(LoginActivity.this, "Fail to login", Toast.LENGTH_SHORT).show();
                             }
@@ -89,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null){
+        if (user != null) {
             Intent i = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(i);
             this.finish();
