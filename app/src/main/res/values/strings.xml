@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">FirebaseCrud</string>
+    <string name="enter_user_name">Enter User Name</string>
+    <string name="enter_your_password">Enter Your Password</string>
+    <string name="login">Login</string>
+    <string name="new_user_register_here">New User? Register Here</string>
+    <string name="enter_course_name">Enter Course Name</string>
+    <string name="enter_course_price">Enter Course Price</string>
+    <string name="enter_course_suited_for">Enter Course Suited For</string>
+    <string name="enter_course_image_link">Enter Course Image Link</string>
+    <string name="enter_course_link">Enter Course Link</string>
+    <string name="enter_course_description">Enter Course Description</string>
+    <string name="add_course">Add Course</string>
+    <string name="confirm_your_password">Confirm Your Password</string>
+    <string name="register">Register</string>
+    <string name="already_a_user_login_here">Already a User? Login Here</string>
 </resources>

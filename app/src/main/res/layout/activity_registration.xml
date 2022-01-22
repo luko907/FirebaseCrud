@@ -8,7 +8,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-
+        android:id="@+id/constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/blue_shade_1">
@@ -17,11 +17,11 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/idTILuserName"
             style="@style/TextInputLayout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="75dp"
-            android:hint="Enter User Name"
-            android:padding="5dp"
+            android:layout_marginTop="@dimen/_75dp"
+            android:hint="@string/enter_user_name"
+            android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/idTILuserPassword"
@@ -37,17 +37,17 @@
                 android:inputType="textEmailAddress"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="14sp" />
+                android:textSize="@dimen/_14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/idTILuserPassword"
             style="@style/TextInputLayout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Enter Your Password"
-            android:padding="5dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:hint="@string/enter_your_password"
+            android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/idTILuserConfirmPassword"
@@ -63,17 +63,17 @@
                 android:inputType="textPassword"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="14sp" />
+                android:textSize="@dimen/_14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/idTILuserConfirmPassword"
             style="@style/TextInputLayout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Confirm Your Password"
-            android:padding="5dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:hint="@string/confirm_your_password"
+            android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/idbtnRegister"
@@ -89,17 +89,17 @@
                 android:inputType="textPassword"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="14sp" />
+                android:textSize="@dimen/_14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <Button
             android:id="@+id/idbtnRegister"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="@dimen/_200dp"
             android:background="@drawable/custom_button_back"
-            android:text="Register"
+            android:text="@string/register"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/idTVLogin"
@@ -109,14 +109,14 @@
 
         <TextView
             android:id="@+id/idTVLogin"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/_16dp"
             android:gravity="center"
-            android:text="Already a User? Login Here"
+            android:text="@string/already_a_user_login_here"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="@dimen/_18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/idbtnRegister" />
