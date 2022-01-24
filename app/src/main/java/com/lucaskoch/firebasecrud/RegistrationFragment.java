@@ -1,13 +1,18 @@
 package com.lucaskoch.firebasecrud;
 
+
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,8 +28,8 @@ import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class RegistrationActivity extends AppCompatActivity {
 
+public class RegistrationFragment extends Fragment {
     TextInputEditText idEdtUserName, idEdtUserPassword, idEdtUserConfirmPassword;
     Button idbtnRegister;
     ProgressBar idPBLoading;
@@ -32,20 +37,26 @@ public class RegistrationActivity extends AppCompatActivity {
     TextView idTVLogin;
     SwipeRefreshLayout swipeLayout;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_registration, container, false);
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        idEdtUserName = findViewById(R.id.idEdtUserName);
-        idbtnRegister = findViewById(R.id.idbtnRegister);
-        idEdtUserPassword = findViewById(R.id.idEdtUserPassword);
-        idEdtUserConfirmPassword = findViewById(R.id.idEdtUserConfirmPassword);
-        idPBLoading = findViewById(R.id.idPBLoading);
-        idTVLogin = findViewById(R.id.idTVLogin);
+        idEdtUserName = view.findViewById(R.id.idEdtUserName);
+        idbtnRegister = view.findViewById(R.id.idbtnRegister);
+        idEdtUserPassword = view.findViewById(R.id.idEdtUserPassword);
+        idEdtUserConfirmPassword = view.findViewById(R.id.idEdtUserConfirmPassword);
+        idPBLoading = view.findViewById(R.id.idPBLoading);
+        idTVLogin = view.findViewById(R.id.idTVLogin);
 
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeLayout = view.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
@@ -61,16 +72,16 @@ public class RegistrationActivity extends AppCompatActivity {
 
             }
         });
-
         mAuth = FirebaseAuth.getInstance();
         idTVLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
-                startActivity(i);
+                LoginFragment loginFragment = new LoginFragment();
+                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frameLayout_fragment_container, loginFragment);
+                fragmentTransaction.commit();
             }
         });
-
         idbtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,23 +91,24 @@ public class RegistrationActivity extends AppCompatActivity {
                 String cnfPwd = Objects.requireNonNull(idEdtUserConfirmPassword.getText()).toString();
 
                 if (!pwd.equals(cnfPwd)) {
-                    Toast.makeText(RegistrationActivity.this, "Please check this password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please check this password", Toast.LENGTH_SHORT).show();
 
                 } else if (TextUtils.isEmpty(userName) && TextUtils.isEmpty(pwd) && TextUtils.isEmpty(cnfPwd)) {
-                    Toast.makeText(RegistrationActivity.this, "Please add your credentials..", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please add your credentials..", Toast.LENGTH_SHORT).show();
+                    idPBLoading.setVisibility(View.GONE);
                 } else {
                     mAuth.createUserWithEmailAndPassword(userName, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 idPBLoading.setVisibility(View.GONE);
-                                Toast.makeText(RegistrationActivity.this, "User Registered..", Toast.LENGTH_SHORT).show();
-                                Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
+                                Toast.makeText(getContext(), "User Registered..", Toast.LENGTH_SHORT).show();
+                               /* Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
                                 startActivity(i);
-                                finish();
+                                finish();*/
                             } else {
                                 idPBLoading.setVisibility(View.GONE);
-                                Toast.makeText(RegistrationActivity.this, "Fail to register", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Fail to register", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

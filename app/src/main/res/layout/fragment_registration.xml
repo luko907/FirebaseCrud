@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".RegistrationFragment">
+
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/constraint_layout"
@@ -19,7 +19,7 @@
             style="@style/TextInputLayout"
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_150dp"
+            android:layout_marginTop="@dimen/_75dp"
             android:hint="@string/enter_user_name"
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
@@ -37,11 +37,7 @@
                 android:inputType="textEmailAddress"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="@dimen/_14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="@dimen/_14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -54,7 +50,7 @@
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/idbtnLogin"
+            app:layout_constraintBottom_toTopOf="@+id/idTILuserConfirmPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/idTILuserName">
@@ -68,34 +64,62 @@
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="@dimen/_14sp" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/idTILuserConfirmPassword"
+            style="@style/TextInputLayout"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16dp"
+            android:hint="@string/confirm_your_password"
+            android:padding="@dimen/_5dp"
+            android:textColorHint="@color/white"
+            app:hintTextColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/idbtnRegister"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idTILuserPassword">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/idEdtUserConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="@dimen/_14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
         <Button
-            android:id="@+id/idbtnLogin"
+            android:id="@+id/idbtnRegister"
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_200dp"
             android:background="@drawable/custom_button_back"
-            android:text="@string/login"
+            android:text="@string/register"
             android:textAllCaps="false"
             android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/idTVLogin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idTILuserPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/idTILuserConfirmPassword" />
 
         <TextView
-            android:id="@+id/idTVRegister"
+            android:id="@+id/idTVLogin"
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16dp"
-            android:text="@string/new_user_register_here"
+            android:gravity="center"
+            android:text="@string/already_a_user_login_here"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="@dimen/_18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idbtnLogin" />
+            app:layout_constraintTop_toBottomOf="@+id/idbtnRegister" />
 
         <ProgressBar
             android:id="@+id/idPBLoading"
@@ -106,12 +130,10 @@
             android:indeterminate="true"
             android:indeterminateDrawable="@drawable/progress_back"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/idTVRegister"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
