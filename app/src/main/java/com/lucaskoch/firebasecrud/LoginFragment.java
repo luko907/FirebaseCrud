@@ -56,7 +56,7 @@ public class LoginFragment extends Fragment {
         idPBLoading = view.findViewById(R.id.idPBLoading);
         idTVRegister = view.findViewById(R.id.idTVRegister);
         mAuth = FirebaseAuth.getInstance();
-        swipeLayout = view.findViewById(R.id.swipe_container);
+        swipeLayout = view.findViewById(R.id.login_swipe_container);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
@@ -77,7 +77,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 RegistrationFragment registrationFragment = new RegistrationFragment();
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frameLayout_fragment_container, registrationFragment);
+                fragmentTransaction.replace(R.id.frameLayout_fragment_container, registrationFragment).addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
