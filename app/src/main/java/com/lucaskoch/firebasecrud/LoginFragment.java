@@ -1,6 +1,8 @@
 package com.lucaskoch.firebasecrud;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -36,6 +38,7 @@ public class LoginFragment extends Fragment {
     ProgressBar idPBLoading;
     TextView idTVRegister;
     FirebaseAuth mAuth;
+    FirebaseUser user;
     FragmentTransaction fragmentTransaction;
     SwipeRefreshLayout swipeLayout;
 
@@ -56,6 +59,7 @@ public class LoginFragment extends Fragment {
         idPBLoading = view.findViewById(R.id.idPBLoading);
         idTVRegister = view.findViewById(R.id.idTVRegister);
         mAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         swipeLayout = view.findViewById(R.id.login_swipe_container);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -92,27 +96,43 @@ public class LoginFragment extends Fragment {
                     Toast.makeText(getContext(), "Please enter your credentials", Toast.LENGTH_SHORT).show();
                     idPBLoading.setVisibility(View.GONE);
                 } else {
-                    mAuth.signInWithEmailAndPassword(userName, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                idPBLoading.setVisibility(View.GONE);
-                                Toast.makeText(getContext(), "Login Succesful", Toast.LENGTH_SHORT).show();
+                    if (isNetworkConnected()){
+                        mAuth.signInWithEmailAndPassword(userName, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    idPBLoading.setVisibility(View.GONE);
+                                    Toast.makeText(getContext(), "Login Succesful", Toast.LENGTH_SHORT).show();
                             /*    Intent i = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(i);
                                 finish();*/
-                            } else {
-                                idPBLoading.setVisibility(View.GONE);
-                                Toast.makeText(getContext(), "Fail to login", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    idPBLoading.setVisibility(View.GONE);
+                                    if (user != null) {
+                                        String email = user.getEmail();
+                                        Toast.makeText(getContext(), "Invalid Password ", Toast.LENGTH_LONG).show();
+                                    }else{
+                                        Toast.makeText(getContext(), "Fail to login", Toast.LENGTH_LONG).show();
+                                    }
+                                }
                             }
-                        }
-                    });
+                        });
+                    }else{
+                        Toast.makeText(getContext(), "No internet connexion", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Fail to login", Toast.LENGTH_SHORT).show();
+                    }
+
+
+
                 }
             }
         });
 
     }
-
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
+    }
     @Override
     public void onStart() {
         super.onStart();

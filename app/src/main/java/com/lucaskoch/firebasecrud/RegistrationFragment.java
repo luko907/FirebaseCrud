@@ -1,6 +1,8 @@
 package com.lucaskoch.firebasecrud;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 import java.util.Timer;
@@ -36,6 +39,7 @@ public class RegistrationFragment extends Fragment {
     FirebaseAuth mAuth;
     TextView idTVLogin;
     SwipeRefreshLayout swipeLayout;
+    FirebaseUser user;
 
 
     @Override
@@ -56,6 +60,7 @@ public class RegistrationFragment extends Fragment {
         idPBLoading = view.findViewById(R.id.idPBLoading);
         idTVLogin = view.findViewById(R.id.idTVLogin);
         mAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         swipeLayout = view.findViewById(R.id.registration_swipe_container);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -90,30 +95,52 @@ public class RegistrationFragment extends Fragment {
                 String pwd = Objects.requireNonNull(idEdtUserPassword.getText()).toString();
                 String cnfPwd = Objects.requireNonNull(idEdtUserConfirmPassword.getText()).toString();
 
+
                 if (!pwd.equals(cnfPwd)) {
-                    Toast.makeText(getContext(), "Please check this password", Toast.LENGTH_SHORT).show();
+                    idPBLoading.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "Password Doesn't Match", Toast.LENGTH_SHORT).show();
+                    idEdtUserPassword.setText("");
+                    idEdtUserConfirmPassword.setText("");
+
 
                 } else if (TextUtils.isEmpty(userName) && TextUtils.isEmpty(pwd) && TextUtils.isEmpty(cnfPwd)) {
                     Toast.makeText(getContext(), "Please add your credentials..", Toast.LENGTH_SHORT).show();
                     idPBLoading.setVisibility(View.GONE);
                 } else {
-                    mAuth.createUserWithEmailAndPassword(userName, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                idPBLoading.setVisibility(View.GONE);
-                                Toast.makeText(getContext(), "User Registered..", Toast.LENGTH_SHORT).show();
+                    if (isNetworkConnected()) {
+                        mAuth.createUserWithEmailAndPassword(userName, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    idPBLoading.setVisibility(View.GONE);
+                                    Toast.makeText(getContext(), "User Registered..", Toast.LENGTH_SHORT).show();
+                                    idEdtUserPassword.setText("");
+                                    idEdtUserConfirmPassword.setText("");
+                                    idEdtUserName.setText("");
                                /* Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
                                 startActivity(i);
                                 finish();*/
-                            } else {
-                                idPBLoading.setVisibility(View.GONE);
-                                Toast.makeText(getContext(), "Fail to register", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    idPBLoading.setVisibility(View.GONE);
+                                    if (user != null) {
+                                        Toast.makeText(getContext(), "Email is already taken ", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(getContext(), "Fail to register", Toast.LENGTH_LONG).show();
+                                    }
+                                }
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        Toast.makeText(getContext(), "No internet connexion", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Fail to register", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 }

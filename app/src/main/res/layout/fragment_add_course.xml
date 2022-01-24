@@ -13,7 +13,7 @@
         android:id="@+id/add_course_constraint_layout">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout2"
+            android:id="@+id/idTICourseName"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+            app:layout_constraintBottom_toTopOf="@+id/idTICoursePrice"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -40,7 +40,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
+            android:id="@+id/idTICoursePrice"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,10 +49,10 @@
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout3"
+            app:layout_constraintBottom_toTopOf="@+id/idTICourseSuitedFor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+            app:layout_constraintTop_toBottomOf="@+id/idTICourseName">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/idEdtCoursePrice"
@@ -67,7 +67,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout3"
+            android:id="@+id/idTICourseSuitedFor"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,10 +76,10 @@
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout4"
+            app:layout_constraintBottom_toTopOf="@+id/idTICourseImageLink"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+            app:layout_constraintTop_toBottomOf="@+id/idTICoursePrice">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/idEdtCourseSuitedFor"
@@ -94,7 +94,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout4"
+            android:id="@+id/idTICourseImageLink"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -103,10 +103,10 @@
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout5"
+            app:layout_constraintBottom_toTopOf="@+id/idTICourseLink"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+            app:layout_constraintTop_toBottomOf="@+id/idTICourseSuitedFor">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/idEdtCourseImageLink"
@@ -121,7 +121,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout5"
+            android:id="@+id/idTICourseLink"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -130,10 +130,10 @@
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout6"
+            app:layout_constraintBottom_toTopOf="@+id/idTICourseDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
+            app:layout_constraintTop_toBottomOf="@+id/idTICourseImageLink">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/idEdtCourseLink"
@@ -148,7 +148,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout6"
+            android:id="@+id/idTICourseDescription"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_200dp"
@@ -160,7 +160,7 @@
             app:layout_constraintBottom_toTopOf="@+id/idbtnAddCourse"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
+            app:layout_constraintTop_toBottomOf="@+id/idTICourseLink">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/idEdtCourseDescription"
@@ -184,7 +184,7 @@
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout6" />
+            app:layout_constraintTop_toBottomOf="@+id/idTICourseDescription" />
 
         <ProgressBar
             android:id="@+id/idPBLoading"
