@@ -1,4 +1,4 @@
-package com.lucaskoch.firebasecrud;
+package com.lucaskoch.firebasecrud.fragment;
 
 
 import android.content.Context;
@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.lucaskoch.firebasecrud.R;
+import com.lucaskoch.firebasecrud.fragment.LoginFragment;
 
 import java.util.Objects;
 import java.util.Timer;
@@ -101,6 +104,7 @@ public class RegistrationFragment extends Fragment {
                     Toast.makeText(getContext(), "Password Doesn't Match", Toast.LENGTH_SHORT).show();
                     idEdtUserPassword.setText("");
                     idEdtUserConfirmPassword.setText("");
+                    idEdtUserPassword.requestFocus();
 
 
                 } else if (TextUtils.isEmpty(userName) && TextUtils.isEmpty(pwd) && TextUtils.isEmpty(cnfPwd)) {
@@ -117,13 +121,19 @@ public class RegistrationFragment extends Fragment {
                                     idEdtUserPassword.setText("");
                                     idEdtUserConfirmPassword.setText("");
                                     idEdtUserName.setText("");
-                               /* Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
-                                startActivity(i);
-                                finish();*/
+                                    LoginFragment loginFragment = new LoginFragment();
+                                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                                    fragmentTransaction.replace(R.id.frameLayout_fragment_container, loginFragment).addToBackStack(null);
+                                    fragmentTransaction.commit();
                                 } else {
                                     idPBLoading.setVisibility(View.GONE);
-                                    if (user != null) {
+                                    if (Objects.equals(user.getEmail(), userName)) {
+                                        Log.v("Tag", "USER = " +user.getEmail());
                                         Toast.makeText(getContext(), "Email is already taken ", Toast.LENGTH_LONG).show();
+                                        idEdtUserName.setText("");
+                                        idEdtUserPassword.setText("");
+                                        idEdtUserConfirmPassword.setText("");
+                                        idEdtUserName.requestFocus();
                                     } else {
                                         Toast.makeText(getContext(), "Fail to register", Toast.LENGTH_LONG).show();
                                     }
@@ -131,6 +141,11 @@ public class RegistrationFragment extends Fragment {
                             }
                         });
                     } else {
+                        idPBLoading.setVisibility(View.GONE);
+                        idEdtUserName.setText("");
+                        idEdtUserPassword.setText("");
+                        idEdtUserConfirmPassword.setText("");
+                        idEdtUserName.requestFocus();
                         Toast.makeText(getContext(), "No internet connexion", Toast.LENGTH_LONG).show();
                         Toast.makeText(getContext(), "Fail to register", Toast.LENGTH_SHORT).show();
                     }

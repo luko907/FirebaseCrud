@@ -1,7 +1,6 @@
-package com.lucaskoch.firebasecrud;
+package com.lucaskoch.firebasecrud.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 
@@ -26,6 +25,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.jakewharton.processphoenix.ProcessPhoenix;
+import com.lucaskoch.firebasecrud.R;
 
 import java.util.Objects;
 import java.util.Timer;
@@ -66,6 +67,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onRefresh() {
                 //Do your task
+                ProcessPhoenix.triggerRebirth(getContext());
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -92,7 +94,7 @@ public class LoginFragment extends Fragment {
                 idPBLoading.setVisibility(View.VISIBLE);
                 String userName = Objects.requireNonNull(idEdtUserName.getText()).toString();
                 String pwd = Objects.requireNonNull(idEdtUserPassword.getText()).toString();
-                if (TextUtils.isEmpty(userName) && TextUtils.isEmpty(pwd)) {
+                if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(pwd)) {
                     Toast.makeText(getContext(), "Please enter your credentials", Toast.LENGTH_SHORT).show();
                     idPBLoading.setVisibility(View.GONE);
                 } else {
@@ -103,14 +105,17 @@ public class LoginFragment extends Fragment {
                                 if (task.isSuccessful()) {
                                     idPBLoading.setVisibility(View.GONE);
                                     Toast.makeText(getContext(), "Login Succesful", Toast.LENGTH_SHORT).show();
-                            /*    Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(i);
-                                finish();*/
+                                    HomeFragment homeFragment = new HomeFragment();
+                                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                                    fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
+                                    fragmentTransaction.commit();
                                 } else {
                                     idPBLoading.setVisibility(View.GONE);
                                     if (user != null) {
                                         String email = user.getEmail();
                                         Toast.makeText(getContext(), "Invalid Password ", Toast.LENGTH_LONG).show();
+                                        idEdtUserPassword.setText("");
+                                        idEdtUserPassword.requestFocus();
                                     }else{
                                         Toast.makeText(getContext(), "Fail to login", Toast.LENGTH_LONG).show();
                                     }
@@ -120,6 +125,7 @@ public class LoginFragment extends Fragment {
                     }else{
                         Toast.makeText(getContext(), "No internet connexion", Toast.LENGTH_LONG).show();
                         Toast.makeText(getContext(), "Fail to login", Toast.LENGTH_SHORT).show();
+                        idPBLoading.setVisibility(View.GONE);
                     }
 
 

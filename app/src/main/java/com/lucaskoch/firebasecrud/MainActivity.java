@@ -5,6 +5,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.lucaskoch.firebasecrud.fragment.LoginFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

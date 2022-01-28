@@ -3,7 +3,7 @@ package com.lucaskoch.firebasecrud.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class CourseRVModel implements Parcelable {
+public class CourseRVModel{
     private String courseName;
     private String coursePrice;
     private String courseSuitedFor;
@@ -15,7 +15,6 @@ public class CourseRVModel implements Parcelable {
     public CourseRVModel() {
     }
 
-
     public CourseRVModel(String courseName, String coursePrice, String courseSuitedFor, String courseImageLink, String courseLink, String courseDescription, String courseID) {
         this.courseName = courseName;
         this.coursePrice = coursePrice;
@@ -25,28 +24,6 @@ public class CourseRVModel implements Parcelable {
         this.courseDescription = courseDescription;
         this.courseID = courseID;
     }
-
-    protected CourseRVModel(Parcel in) {
-        courseName = in.readString();
-        coursePrice = in.readString();
-        courseSuitedFor = in.readString();
-        courseImageLink = in.readString();
-        courseLink = in.readString();
-        courseDescription = in.readString();
-        courseID = in.readString();
-    }
-
-    public static final Creator<CourseRVModel> CREATOR = new Creator<CourseRVModel>() {
-        @Override
-        public CourseRVModel createFromParcel(Parcel in) {
-            return new CourseRVModel(in);
-        }
-
-        @Override
-        public CourseRVModel[] newArray(int size) {
-            return new CourseRVModel[size];
-        }
-    };
 
     public String getCourseName() {
         return courseName;
@@ -105,18 +82,15 @@ public class CourseRVModel implements Parcelable {
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(courseName);
-        dest.writeString(coursePrice);
-        dest.writeString(courseSuitedFor);
-        dest.writeString(courseImageLink);
-        dest.writeString(courseLink);
-        dest.writeString(courseDescription);
-        dest.writeString(courseID);
+    public String toString() {
+        return "CourseRVModel{" +
+                "courseName='" + courseName + '\'' +
+                ", coursePrice='" + coursePrice + '\'' +
+                ", courseSuitedFor='" + courseSuitedFor + '\'' +
+                ", courseImageLink='" + courseImageLink + '\'' +
+                ", courseLink='" + courseLink + '\'' +
+                ", courseDescription='" + courseDescription + '\'' +
+                ", courseID='" + courseID + '\'' +
+                '}';
     }
 }

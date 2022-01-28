@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipe_container"
+    android:id="@+id/add_course_swipe_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddCourseFragment">
+    tools:context=".fragment.AddCourseFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/blue_shade_1">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_course_constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/blue_shade_1"
-        android:id="@+id/add_course_constraint_layout">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/idTICourseName"
@@ -60,9 +65,20 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="number"
+                android:maxLength="5"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="@dimen/_14sp" />
+
+            <TextView
+                android:id="@+id/max_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:text="@string/max_price_9999"
+                android:textColor="#FD0000"
+                android:visibility="gone" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -162,12 +178,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/idTICourseLink">
 
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/idEdtCourseDescription"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="top"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="@dimen/_14sp" />
@@ -201,5 +220,8 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
+
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

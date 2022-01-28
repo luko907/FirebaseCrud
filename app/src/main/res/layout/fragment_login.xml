@@ -4,7 +4,7 @@
     android:id="@+id/login_swipe_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginFragment">
+    tools:context=".fragment.LoginFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/login_constraint_layout"
