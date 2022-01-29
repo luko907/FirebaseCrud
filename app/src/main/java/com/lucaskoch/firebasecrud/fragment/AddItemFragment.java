@@ -1,17 +1,32 @@
 package com.lucaskoch.firebasecrud.fragment;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
+
+import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +46,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.lucaskoch.firebasecrud.R;
 import com.lucaskoch.firebasecrud.model.ItemRVModel;
 
+
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Timer;
@@ -50,6 +67,7 @@ public class AddItemFragment extends Fragment {
     String itemID;
     SwipeRefreshLayout add_item_swipe_container;
     AutoCompleteTextView idACT_typeDropdown,idACT_genderDropdown;
+    ActivityResultLauncher<Intent> someActivityResultLauncher;
 
 
     @Override
@@ -78,7 +96,41 @@ public class AddItemFragment extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("clothes");
         add_item_swipe_container = view.findViewById(R.id.add_item_swipe_container);
+        someActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            // There are no request codes
+                            final ContentResolver cr= requireActivity().getContentResolver();
+                            Intent data = result.getData();
+                            Uri imageUri = Objects.requireNonNull(data).getData();
+                            Bitmap bitmap = null;
+                            try {
+                                bitmap = MediaStore
+                                        .Images
+                                        .Media
+                                        .getBitmap(
+                                                cr,
+                                                imageUri);
+                                idIMG_preview.setImageBitmap(bitmap);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
 
+                        }
+                    }
+                });
+
+        idBTN_upload_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+               openSomeActivityForResult();
+
+            }
+        });
         idEDT_price.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -169,17 +221,19 @@ public class AddItemFragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), "No internet connexion", Toast.LENGTH_LONG).show();
                 }
-
-
-            }
-
-            private boolean isNetworkConnected() {
-                ConnectivityManager cm = (ConnectivityManager)requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-                return cm.getActiveNetworkInfo() != null;
             }
         });
 
     }
 
-
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager)requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
+    }
+   public void openSomeActivityForResult() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        someActivityResultLauncher.launch(intent);
+    }
 }

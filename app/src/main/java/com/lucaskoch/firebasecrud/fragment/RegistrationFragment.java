@@ -22,13 +22,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.SignInMethodQueryResult;
+import com.lucaskoch.firebasecrud.OnEmailCheckListener;
 import com.lucaskoch.firebasecrud.R;
-import com.lucaskoch.firebasecrud.fragment.LoginFragment;
 
 import java.util.Objects;
 import java.util.Timer;
@@ -63,7 +65,6 @@ public class RegistrationFragment extends Fragment {
         idPBLoading = view.findViewById(R.id.idPBLoading);
         idTVLogin = view.findViewById(R.id.idTVLogin);
         mAuth = FirebaseAuth.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
         swipeLayout = view.findViewById(R.id.registration_swipe_container);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -97,47 +98,59 @@ public class RegistrationFragment extends Fragment {
                 String userName = Objects.requireNonNull(idEdtUserName.getText()).toString();
                 String pwd = Objects.requireNonNull(idEdtUserPassword.getText()).toString();
                 String cnfPwd = Objects.requireNonNull(idEdtUserConfirmPassword.getText()).toString();
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+                if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(pwd) || TextUtils.isEmpty(cnfPwd)) {
+                    Toast.makeText(getContext(), "Please add your credentials..", Toast.LENGTH_SHORT).show();
+                    idPBLoading.setVisibility(View.GONE);
 
+                } else if (!userName.trim().matches(emailPattern)) {
+                    idPBLoading.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
+                    idEdtUserPassword.setText("");
+                    idEdtUserConfirmPassword.setText("");
+                    idEdtUserName.requestFocus();
 
-                if (!pwd.equals(cnfPwd)) {
+                } else if (pwd.length() < 6) {
+                    Toast.makeText(getContext(), "Please Password Must Be At Least six characters long", Toast.LENGTH_SHORT).show();
+                    idEdtUserPassword.requestFocus();
+                    idPBLoading.setVisibility(View.GONE);
+                } else if (!pwd.equals(cnfPwd)) {
                     idPBLoading.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "Password Doesn't Match", Toast.LENGTH_SHORT).show();
                     idEdtUserPassword.setText("");
                     idEdtUserConfirmPassword.setText("");
                     idEdtUserPassword.requestFocus();
-
-
-                } else if (TextUtils.isEmpty(userName) && TextUtils.isEmpty(pwd) && TextUtils.isEmpty(cnfPwd)) {
-                    Toast.makeText(getContext(), "Please add your credentials..", Toast.LENGTH_SHORT).show();
-                    idPBLoading.setVisibility(View.GONE);
                 } else {
                     if (isNetworkConnected()) {
-                        mAuth.createUserWithEmailAndPassword(userName, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        isCheckEmail(userName, new OnEmailCheckListener() {
                             @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
+                            public void onSuccess(boolean isRegistered) {
+                                if (isRegistered) {
                                     idPBLoading.setVisibility(View.GONE);
-                                    Toast.makeText(getContext(), "User Registered..", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Email Already Taken", Toast.LENGTH_SHORT).show();
+                                    idEdtUserName.setText("");
                                     idEdtUserPassword.setText("");
                                     idEdtUserConfirmPassword.setText("");
-                                    idEdtUserName.setText("");
-                                    LoginFragment loginFragment = new LoginFragment();
-                                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                                    fragmentTransaction.replace(R.id.frameLayout_fragment_container, loginFragment).addToBackStack(null);
-                                    fragmentTransaction.commit();
+                                    idEdtUserName.requestFocus();
                                 } else {
-                                    idPBLoading.setVisibility(View.GONE);
-                                    if (Objects.equals(user.getEmail(), userName)) {
-                                        Log.v("Tag", "USER = " +user.getEmail());
-                                        Toast.makeText(getContext(), "Email is already taken ", Toast.LENGTH_LONG).show();
-                                        idEdtUserName.setText("");
-                                        idEdtUserPassword.setText("");
-                                        idEdtUserConfirmPassword.setText("");
-                                        idEdtUserName.requestFocus();
-                                    } else {
-                                        Toast.makeText(getContext(), "Fail to register", Toast.LENGTH_LONG).show();
-                                    }
+                                    mAuth.createUserWithEmailAndPassword(userName, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (task.isSuccessful()) {
+                                                idPBLoading.setVisibility(View.GONE);
+                                                Toast.makeText(getContext(), "User Registered..", Toast.LENGTH_SHORT).show();
+                                                idEdtUserPassword.setText("");
+                                                idEdtUserConfirmPassword.setText("");
+                                                idEdtUserName.setText("");
+                                                LoginFragment loginFragment = new LoginFragment();
+                                                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                                                fragmentTransaction.replace(R.id.frameLayout_fragment_container, loginFragment).addToBackStack(null);
+                                                fragmentTransaction.commit();
+                                            }
+                                        }
+                                    });
                                 }
+
                             }
                         });
                     } else {
@@ -153,6 +166,23 @@ public class RegistrationFragment extends Fragment {
             }
         });
     }
+
+    public void isCheckEmail(final String email, final OnEmailCheckListener listener) {
+        mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+            @Override
+            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                boolean check = Objects.requireNonNull(task.getResult().getSignInMethods()).size() == 1;
+                listener.onSuccess(check);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
+
 
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);

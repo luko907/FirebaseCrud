@@ -19,7 +19,7 @@
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_150dp"
-            android:hint="@string/enter_user_name"
+            android:hint="@string/enter_username"
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"

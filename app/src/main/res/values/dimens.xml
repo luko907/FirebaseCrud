@@ -11,4 +11,10 @@
     <dimen name="_40dp">40dp</dimen>
     <dimen name="_8dp">8dp</dimen>
     <dimen name="_32dp">32dp</dimen>
+    <dimen name="_3dp">3dp</dimen>
+    <dimen name="_4dp">4dp</dimen>
+    <dimen name="_1dp">1dp</dimen>
+    <dimen name="_15sp">15sp</dimen>
+    <dimen name="_6dp">6dp</dimen>
+    <dimen name="_100dp">100dp</dimen>
 </resources>
