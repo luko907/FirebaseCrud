@@ -2,10 +2,10 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/add_course_swipe_container"
+    android:id="@+id/add_item_swipe_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.AddCourseFragment">
+    tools:context=".fragment.AddItemFragment">
 
 <ScrollView
     android:layout_width="match_parent"
@@ -17,23 +17,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/idTICourseName"
+            android:id="@+id/idTI_title"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_40dp"
-            android:hint="@string/enter_course_name"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="8dp"
+            android:hint="Enter Title"
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/idTICoursePrice"
+            app:layout_constraintBottom_toTopOf="@+id/idIMG_preview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/idEdtCourseName"
+                android:id="@+id/idEDT_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
@@ -44,28 +46,139 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <Button
+            android:background="@drawable/custom_button_back"
+            android:id="@+id/idBTN_upload_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:text="Upload Image"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toTopOf="@+id/idTI_typeDropdown"
+            app:layout_constraintEnd_toStartOf="@+id/idIMG_preview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idTI_title" />
+
+        <ImageView
+            android:id="@+id/idIMG_preview"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintBottom_toTopOf="@+id/idTI_typeDropdown"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/idBTN_upload_image"
+            app:layout_constraintTop_toBottomOf="@+id/idTI_title" />
+
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/idTICoursePrice"
+            android:id="@+id/idTI_typeDropdown"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8dp"
-            android:hint="@string/enter_course_price"
+            android:layout_marginTop="8dp"
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/idTICourseSuitedFor"
+            app:layout_constraintBottom_toTopOf="@+id/idTI_genderDropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idTICourseName">
+            app:layout_constraintTop_toBottomOf="@+id/idIMG_preview">
+
+            <AutoCompleteTextView
+                android:id="@+id/idACT_typeDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:importantForAutofill="no"
+                android:inputType="none"
+                android:padding="14dp"
+                android:text="Choose Clothe"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="@dimen/_14sp"
+                tools:ignore="LabelFor" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/idTI_genderDropdown"
+            style="@style/TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5dp"
+            android:textColorHint="@color/white"
+            app:hintTextColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/idTI_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idTI_typeDropdown">
+
+            <AutoCompleteTextView
+                android:id="@+id/idACT_genderDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:importantForAutofill="no"
+                android:inputType="none"
+                android:padding="14dp"
+                android:text="Choose Gender"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="@dimen/_14sp"
+                tools:ignore="LabelFor" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/idTI_size"
+            style="@style/TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Size"
+            android:padding="@dimen/_5dp"
+            android:textColorHint="@color/white"
+            app:hintTextColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/idTI_price"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idTI_genderDropdown">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/idEdtCoursePrice"
+                android:id="@+id/idEDT_size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="number"
                 android:maxLength="5"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="@dimen/_14sp" />
+
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/idTI_price"
+            style="@style/TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Price"
+            android:padding="@dimen/_5dp"
+            android:textColorHint="@color/white"
+            app:hintTextColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/idTI_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idTI_size">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/idEDT_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="number"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="@dimen/_14sp" />
@@ -79,134 +192,51 @@
                 android:text="@string/max_price_9999"
                 android:textColor="#FD0000"
                 android:visibility="gone" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/idTICourseSuitedFor"
+            android:id="@+id/idTI_description"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8dp"
-            android:hint="@string/enter_course_suited_for"
+            android:hint="Enter Description"
+            android:minHeight="100dp"
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/idTICourseImageLink"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idTICoursePrice">
+            app:layout_constraintTop_toBottomOf="@+id/idTI_price">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/idEdtCourseSuitedFor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="@dimen/_14sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/idTICourseImageLink"
-            style="@style/TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8dp"
-            android:hint="@string/enter_course_image_link"
-            android:padding="@dimen/_5dp"
-            android:textColorHint="@color/white"
-            app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/idTICourseLink"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idTICourseSuitedFor">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/idEdtCourseImageLink"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="@dimen/_14sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/idTICourseLink"
-            style="@style/TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8dp"
-            android:hint="@string/enter_course_link"
-            android:padding="@dimen/_5dp"
-            android:textColorHint="@color/white"
-            app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/idTICourseDescription"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idTICourseImageLink">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/idEdtCourseLink"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="@dimen/_14sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/idTICourseDescription"
-            style="@style/TextInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_200dp"
-            android:layout_marginTop="@dimen/_8dp"
-            android:hint="@string/enter_course_description"
-            android:padding="@dimen/_5dp"
-            android:textColorHint="@color/white"
-            app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/idbtnAddCourse"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idTICourseLink">
-
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/idEdtCourseDescription"
+                android:id="@+id/idEDT_description"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="top"
+                android:minHeight="100dp"
                 android:importantForAutofill="no"
                 android:inputType="textMultiLine"
                 android:scrollbars="vertical"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="@dimen/_14sp" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/idbtnAddCourse"
+            android:id="@+id/idBTN_add_clothe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_32dp"
+            android:layout_marginTop="32dp"
             android:background="@drawable/custom_button_back"
-            android:text="@string/add_course"
+            android:text="Add Item"
             android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idTICourseDescription" />
+            app:layout_constraintTop_toBottomOf="@+id/idTI_description" />
 
         <ProgressBar
-            android:id="@+id/idPBLoading"
+            android:id="@+id/idPB_progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -215,13 +245,11 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
-
-
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

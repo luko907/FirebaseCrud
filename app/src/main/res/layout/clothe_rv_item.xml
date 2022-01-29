@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/id_card_view_course_item_container"
+    android:id="@+id/idCV_itemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -11,14 +11,14 @@
     app:cardCornerRadius="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/id_constraint_course_item_layout"
+        android:id="@+id/idCL_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/blue_shade_1">
 
 
         <ImageView
-            android:id="@+id/id_ITimg"
+            android:id="@+id/idIT_img"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:contentDescription="@string/inspect"
@@ -30,7 +30,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/id_ITcourseName"
+            android:id="@+id/idITV_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
@@ -42,11 +42,11 @@
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/id_ITimg"
-            tools:text="Course Name" />
+            app:layout_constraintTop_toBottomOf="@+id/idIT_img"
+            tools:text="Title" />
 
         <TextView
-            android:id="@+id/id_TIcoursePrice"
+            android:id="@+id/idITV_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -58,8 +58,8 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/id_ITimg"
-            tools:text="Course Price" />
+            app:layout_constraintTop_toBottomOf="@+id/idIT_img"
+            tools:text="Price" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

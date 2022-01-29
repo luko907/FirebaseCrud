@@ -15,7 +15,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/idRVCourses"
+            android:id="@+id/idRV_clothes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="1dp"
@@ -26,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/idPB_homeProgressBar"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/idFloatBtn"
+            android:id="@+id/idFA_btnAdd"
             app:backgroundTint="#FF8080"
             app:borderWidth="3dp"
             android:backgroundTint="#151515"

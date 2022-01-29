@@ -12,12 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
@@ -28,24 +26,23 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.firebase.database.ValueEventListener;
 import com.lucaskoch.firebasecrud.R;
-import com.lucaskoch.firebasecrud.adapter.CourseRVAdapter;
-import com.lucaskoch.firebasecrud.model.CourseRVModel;
+import com.lucaskoch.firebasecrud.adapter.ItemRVAdapter;
+import com.lucaskoch.firebasecrud.model.ItemRVModel;
 
 import java.util.ArrayList;
 
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 public class HomeFragment extends Fragment {
-    RecyclerView idRVCourses;
-    ProgressBar progressBar;
-    FloatingActionButton idFloatBtn;
+    RecyclerView idRV_clothes;
+    ProgressBar idPB_homeProgressBar;
+    FloatingActionButton idFA_btnAdd;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     ConstraintLayout home_constraint_layout;
-    ArrayList<CourseRVModel> courseRVModelArrayList;
+    ArrayList<ItemRVModel> itemRVModelArrayList;
     SwipeRefreshLayout home_swipe_container;
 
 
@@ -59,15 +56,15 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        databaseReference = FirebaseDatabase.getInstance().getReference("Courses");
-        idFloatBtn = view.findViewById(R.id.idFloatBtn);
-        idRVCourses = view.findViewById(R.id.idRVCourses);
-        courseRVModelArrayList = new ArrayList<>();
-        CourseRVAdapter courseRVAdapter = new CourseRVAdapter(courseRVModelArrayList);
-        idRVCourses.setLayoutManager(new LinearLayoutManager(getContext()));
-        idRVCourses.setAdapter(courseRVAdapter);
-        progressBar =view.findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
+        databaseReference = FirebaseDatabase.getInstance().getReference("clothes");
+        idFA_btnAdd = view.findViewById(R.id.idFA_btnAdd);
+        idRV_clothes = view.findViewById(R.id.idRV_clothes);
+        itemRVModelArrayList = new ArrayList<>();
+        ItemRVAdapter itemRVAdapter = new ItemRVAdapter(itemRVModelArrayList);
+        idRV_clothes.setLayoutManager(new LinearLayoutManager(getContext()));
+        idRV_clothes.setAdapter(itemRVAdapter);
+        idPB_homeProgressBar =view.findViewById(R.id.idPB_homeProgressBar);
+        idPB_homeProgressBar.setVisibility(View.VISIBLE);
         home_swipe_container = view.findViewById(R.id.home_swipe_container);
         home_swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -84,12 +81,12 @@ public class HomeFragment extends Fragment {
 
             }
         });
-        idFloatBtn.setOnClickListener(new View.OnClickListener() {
+        idFA_btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddCourseFragment addCourseFragment = new AddCourseFragment();
+                AddItemFragment addItemFragment = new AddItemFragment();
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frameLayout_fragment_container, addCourseFragment).addToBackStack(null);
+                fragmentTransaction.replace(R.id.frameLayout_fragment_container, addItemFragment).addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
@@ -97,9 +94,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
-                    AddCourseFragment addCourseFragment = new AddCourseFragment();
+                    AddItemFragment addItemFragment = new AddItemFragment();
                     FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.frameLayout_fragment_container, addCourseFragment).addToBackStack(null);
+                    fragmentTransaction.replace(R.id.frameLayout_fragment_container, addItemFragment).addToBackStack(null);
                     fragmentTransaction.commit();
                 }
             }
@@ -113,10 +110,9 @@ public class HomeFragment extends Fragment {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                /*Log.v("Tag", "Respnse : " + Objects.requireNonNull(Objects.requireNonNull(snapshot.getValue(CourseRVModel.class)).toString()));*/
-                courseRVModelArrayList.add(snapshot.getValue(CourseRVModel.class));
-                courseRVAdapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
+                itemRVModelArrayList.add(snapshot.getValue(ItemRVModel.class));
+                itemRVAdapter.notifyDataSetChanged();
+                idPB_homeProgressBar.setVisibility(View.GONE);
             }
 
             @Override

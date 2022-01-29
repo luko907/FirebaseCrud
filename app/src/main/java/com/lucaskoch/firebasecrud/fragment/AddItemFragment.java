@@ -1,7 +1,5 @@
 package com.lucaskoch.firebasecrud.fragment;
 
-import static androidx.core.app.NavUtils.navigateUpTo;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -14,13 +12,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.URLUtil;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,11 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.lucaskoch.firebasecrud.R;
-import com.lucaskoch.firebasecrud.model.CourseRVModel;
+import com.lucaskoch.firebasecrud.model.ItemRVModel;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Timer;
@@ -44,43 +38,48 @@ import java.util.TimerTask;
 
 
 
-public class AddCourseFragment extends Fragment {
+public class AddItemFragment extends Fragment {
 
-    TextInputEditText idEdtCourseName, idEdtCoursePrice, idEdtCourseSuitedFor, idEdtCourseImageLink, idEdtCourseLink, idEdtCourseDescription;
+    TextInputEditText idEDT_title, idEDT_price,idEDT_description,idEDT_size;
     TextView max_price;
-    Button idbtnAddCourse;
+    ImageView idIMG_preview;
+    Button idBTN_add_clothe,idBTN_upload_image;
     ProgressBar idPBLoading;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
-    String courseID;
-    SwipeRefreshLayout add_course_swipe_container;
+    String itemID;
+    SwipeRefreshLayout add_item_swipe_container;
+    AutoCompleteTextView idACT_typeDropdown,idACT_genderDropdown;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_course, container, false);
+        return inflater.inflate(R.layout.fragment_add_item, container, false);
     }
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        idEdtCourseName = view.findViewById(R.id.idEdtCourseName);
-        idEdtCoursePrice = view.findViewById(R.id.idEdtCoursePrice);
-        idEdtCourseSuitedFor = view.findViewById(R.id.idEdtCourseSuitedFor);
-        idEdtCourseImageLink = view.findViewById(R.id.idEdtCourseImageLink);
-        idEdtCourseLink = view.findViewById(R.id.idEdtCourseLink);
-        idEdtCourseDescription = view.findViewById(R.id.idEdtCourseDescription);
+        idEDT_title = view.findViewById(R.id.idEDT_title);
+        idEDT_price = view.findViewById(R.id.idEDT_price);
+        idBTN_upload_image =view.findViewById(R.id.idBTN_upload_image);
+        idIMG_preview = view.findViewById(R.id.idIMG_preview);
+        idEDT_description = view.findViewById(R.id.idEDT_description);
+        idACT_typeDropdown = view.findViewById(R.id.idACT_typeDropdown);
+        idACT_genderDropdown = view.findViewById(R.id.idACT_genderDropdown);
+        idEDT_size = view.findViewById(R.id.idEDT_size);
+
         max_price = view.findViewById(R.id.max_price);
-        idbtnAddCourse = view.findViewById(R.id.idbtnAddCourse);
+        idBTN_add_clothe = view.findViewById(R.id.idBTN_add_clothe);
         idPBLoading = view.findViewById(R.id.idPBLoading);
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("Courses");
-        add_course_swipe_container = view.findViewById(R.id.add_course_swipe_container);
+        databaseReference = firebaseDatabase.getReference("clothes");
+        add_item_swipe_container = view.findViewById(R.id.add_item_swipe_container);
 
-        idEdtCoursePrice.addTextChangedListener(new TextWatcher() {
+        idEDT_price.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -103,24 +102,21 @@ public class AddCourseFragment extends Fragment {
 
             }
         });
-        add_course_swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        add_item_swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
             public void onRefresh() {
                 //Do your task
-                idEdtCourseName.setText("");
-                idEdtCoursePrice.setText("");
-                idEdtCourseSuitedFor.setText("");
-                idEdtCourseImageLink.setText("");
-                idEdtCourseLink.setText("");
-                idEdtCourseDescription.setText("");
-                idEdtCourseName.requestFocus();
+                idEDT_title.setText("");
+                idEDT_price.setText("");
+                idEDT_description.setText("");
+                idEDT_title.requestFocus();
 
 
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        add_course_swipe_container.setRefreshing(false);
+                        add_item_swipe_container.setRefreshing(false);
                     }
                 }, 300L);
 
@@ -129,36 +125,32 @@ public class AddCourseFragment extends Fragment {
         });
 
 
-        idbtnAddCourse.setOnClickListener(new View.OnClickListener() {
+        idBTN_add_clothe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String courseName = Objects.requireNonNull(idEdtCourseName.getText()).toString();
-                String coursePrice = Objects.requireNonNull(idEdtCoursePrice.getText()).toString();
-                String courseSuitedFor = Objects.requireNonNull(idEdtCourseSuitedFor.getText()).toString();
-                String courseImageLink = Objects.requireNonNull(idEdtCourseImageLink.getText()).toString();
-                String courseLink = Objects.requireNonNull(idEdtCourseLink.getText()).toString();
-                String courseDescription = Objects.requireNonNull(idEdtCourseDescription.getText()).toString();
-                courseID = courseName.toLowerCase(Locale.ROOT);
-                CourseRVModel courseRVModel = new CourseRVModel(courseName, coursePrice, courseSuitedFor, courseImageLink, courseLink, courseDescription, courseName);
+                String title = Objects.requireNonNull(idEDT_title.getText()).toString();
+                String price = Objects.requireNonNull(idEDT_price.getText()).toString();
+                String description = Objects.requireNonNull(idEDT_description.getText()).toString();
+                String gender =Objects.requireNonNull(idACT_genderDropdown.getText()).toString();
+                String type= Objects.requireNonNull(idACT_typeDropdown.getText()).toString();
+                String img = Objects.requireNonNull(idBTN_upload_image.getText()).toString();
+                String size=  Objects.requireNonNull(idEDT_size.getText()).toString();
+                itemID = title.toLowerCase(Locale.ROOT);
+                ItemRVModel itemRVModel = new ItemRVModel(title, img, type, gender, size, price, description,itemID);
 
                 if (isNetworkConnected()) {
-                    boolean imageResponse = Patterns.WEB_URL.matcher(courseImageLink).matches();
-                    if (TextUtils.isEmpty(courseName) || TextUtils.isEmpty(coursePrice) || TextUtils.isEmpty(courseSuitedFor) || TextUtils.isEmpty(courseImageLink) || TextUtils.isEmpty(courseLink) || TextUtils.isEmpty(courseDescription)) {
+                    if (TextUtils.isEmpty(title) || TextUtils.isEmpty(price) || TextUtils.isEmpty(description)) {
                         Toast.makeText(getContext(), "Please fill empty values...", Toast.LENGTH_SHORT).show();
-                    } else if (!imageResponse) {
-                        Toast.makeText(getContext(), "Invalid URL image ...", Toast.LENGTH_SHORT).show();
-                        idEdtCourseImageLink.setText("");
-                        idEdtCourseImageLink.requestFocus();
                    } else {
                         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.child(courseRVModel.getCourseID().toLowerCase(Locale.ROOT)).exists()) {
+                                if (snapshot.child(itemRVModel.getItemID().toLowerCase(Locale.ROOT)).exists()) {
                                     /*Log.v("Tag", "ID exist : "+ snapshot.child(courseRVModel.getCourseID().toLowerCase(Locale.ROOT)));*/
                                     Toast.makeText(getContext(), "Data exist", Toast.LENGTH_SHORT).show();
-                                    idEdtCourseName.setText("");
+                                    idEDT_title.setText("");
                                 } else {
-                                    databaseReference.child(courseID).setValue(courseRVModel);
+                                    databaseReference.child(itemID).setValue(itemRVModel);
                                     Toast.makeText(getContext(), "Course Added...", Toast.LENGTH_SHORT).show();
                                     HomeFragment homeFragment = new HomeFragment();
                                     FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
