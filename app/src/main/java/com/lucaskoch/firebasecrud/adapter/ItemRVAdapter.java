@@ -1,6 +1,7 @@
 package com.lucaskoch.firebasecrud.adapter;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lucaskoch.firebasecrud.R;
 import com.lucaskoch.firebasecrud.model.ItemRVModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -40,8 +42,7 @@ public class ItemRVAdapter extends RecyclerView.Adapter<ItemRVAdapter.ViewHolder
 
         holder.idITV_title.setText(itemRVModelArrayList.get(position).getTitle() + "...");
         holder.idITV_price.setText("$ " + itemRVModelArrayList.get(position).getPrice());
-
-        /*Picasso.get().load(courseRVModelArrayList.get(position).getCourseImageLink()).into(holder.id_ITimg);*/
+        Picasso.get().load(itemRVModelArrayList.get(position).getImg()).into(holder.idIV_img);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class ItemRVAdapter extends RecyclerView.Adapter<ItemRVAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView idITV_title, idITV_price;
-        ImageView idIT_img;
+        ImageView idIV_img;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -59,7 +60,7 @@ public class ItemRVAdapter extends RecyclerView.Adapter<ItemRVAdapter.ViewHolder
 
             idITV_title = itemView.findViewById(R.id.idITV_title);
             idITV_price = itemView.findViewById(R.id.idITV_price);
-            idIT_img = itemView.findViewById(R.id.idIT_img);
+            idIV_img = itemView.findViewById(R.id.idIV_img);
         }
     }
 }

@@ -74,8 +74,10 @@
             android:contentDescription="@string/inspect" />
 
         <com.google.android.material.textfield.TextInputLayout
+
             android:id="@+id/idTI_typeDropdown"
-            style="@style/TextInputLayout"
+            android:theme="@style/changeBackgroundColor"
+            style="@style/DropDown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -105,13 +107,14 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/idTI_genderDropdown"
-            style="@style/TextInputLayout"
+            android:theme="@style/changeBackgroundColor"
+            style="@style/DropDown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/idTI_size"
+            app:layout_constraintBottom_toTopOf="@+id/idTI_sizeDropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/idTI_typeDropdown">
@@ -132,12 +135,13 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/idTI_size"
-            style="@style/TextInputLayout"
+            android:id="@+id/idTI_sizeDropdown"
+            android:theme="@style/changeBackgroundColor"
+            style="@style/DropDown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_size"
             android:padding="@dimen/_5dp"
             android:textColorHint="@color/white"
             app:hintTextColor="@color/white"
@@ -146,18 +150,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/idTI_genderDropdown">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/idEDT_size"
+            <AutoCompleteTextView
+                android:id="@+id/idACT_sizeDropdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:importantForAutofill="no"
-                android:inputType="number"
-                android:maxLength="5"
+                android:inputType="none"
+                android:padding="@dimen/_14sp"
+                android:text="Choose Size"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="@dimen/_14sp" />
-
-
+                android:textSize="@dimen/_14sp"
+                tools:ignore="LabelFor" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -173,7 +178,7 @@
             app:layout_constraintBottom_toTopOf="@+id/idTI_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idTI_size">
+            app:layout_constraintTop_toBottomOf="@+id/idTI_sizeDropdown">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/idEDT_price"

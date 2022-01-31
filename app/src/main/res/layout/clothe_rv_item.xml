@@ -18,7 +18,7 @@
 
 
         <ImageView
-            android:id="@+id/idIT_img"
+            android:id="@+id/idIV_img"
             android:layout_width="@dimen/_0dp"
             android:layout_height="@dimen/_200dp"
             android:contentDescription="@string/inspect"
@@ -42,7 +42,7 @@
             android:textSize="@dimen/_15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idIT_img"
+            app:layout_constraintTop_toBottomOf="@+id/idIV_img"
             tools:text="Title" />
 
         <TextView
@@ -58,7 +58,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idIT_img"
+            app:layout_constraintTop_toBottomOf="@+id/idIV_img"
             tools:text="Price" />
 
 
