@@ -37,14 +37,10 @@ import java.util.TimerTask;
 
 
 public class LoginFragment extends Fragment {
-    TextInputEditText idEdtUserName, idEdtUserPassword;
-    Button idbtnLogin;
-    ProgressBar idPBLoading;
-    TextView idTVRegister;
-    FirebaseAuth mAuth;
-    FirebaseUser user;
-    FragmentTransaction fragmentTransaction;
-    SwipeRefreshLayout swipeLayout;
+    private TextInputEditText idEdtUserName, idEdtUserPassword;
+    private ProgressBar idPBLoading;
+    private FirebaseAuth mAuth;
+    private SwipeRefreshLayout swipeLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,18 +55,17 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         idEdtUserName = view.findViewById(R.id.idEdtUserName);
         idEdtUserPassword = view.findViewById(R.id.idEdtUserPassword);
-        idbtnLogin = view.findViewById(R.id.idbtnLogin);
+        Button idbtnLogin = view.findViewById(R.id.idbtnLogin);
         idPBLoading = view.findViewById(R.id.idPBLoading);
-        idTVRegister = view.findViewById(R.id.idTVRegister);
+        TextView idTVRegister = view.findViewById(R.id.idTVRegister);
         mAuth = FirebaseAuth.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
         swipeLayout = view.findViewById(R.id.login_swipe_container);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
             public void onRefresh() {
                 //Do your task
-                ProcessPhoenix.triggerRebirth(getContext());
+                ProcessPhoenix.triggerRebirth(requireContext());
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {

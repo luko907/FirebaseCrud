@@ -1,7 +1,6 @@
 package com.lucaskoch.firebasecrud.adapter;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 
 public class ItemRVAdapter extends RecyclerView.Adapter<ItemRVAdapter.ViewHolder> {
 
-    ArrayList<ItemRVModel> itemRVModelArrayList;
+    private final ArrayList<ItemRVModel> itemRVModelArrayList;
 
     public ItemRVAdapter(ArrayList<ItemRVModel> itemRVModelArrayList) {
         this.itemRVModelArrayList = itemRVModelArrayList;
@@ -50,7 +49,7 @@ public class ItemRVAdapter extends RecyclerView.Adapter<ItemRVAdapter.ViewHolder
         return itemRVModelArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView idITV_title, idITV_price;
         ImageView idIV_img;
 

@@ -27,7 +27,6 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,31 +63,27 @@ import java.util.UUID;
 
 public class AddItemFragment extends Fragment {
 
-    TextInputEditText idEDT_title, idEDT_price, idEDT_description;
-    TextView max_price;
-    ImageView idIMG_preview;
-    Button idBTN_add_clothe, idBTN_upload_image;
-    ProgressBar idPBLoading;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
-    FirebaseStorage storage;
-    FirebaseAuth mAuth= FirebaseAuth.getInstance();
-    StorageReference storageReference;
-    StorageReference putFileUriToFirebase;
-    String itemID;
-    SwipeRefreshLayout add_item_swipe_container;
-    AutoCompleteTextView idACT_typeDropdown, idACT_genderDropdown, idACT_sizeDropdown;
-    ActivityResultLauncher<Intent> someActivityResultLauncher;
-    String[] types;
-    String[] gender;
-    String[] sizes;
-    String randomUUID;
-    Uri imageUri = null;
-    String imageLinkFireBase;
-    Bitmap bitmap;
-    byte[] dataToSend;
-    ObservableBoolean uploadImageToFirebase = new ObservableBoolean();
-    ObservableBoolean checkImageLinkFirebase = new ObservableBoolean();
+    private TextInputEditText idEDT_title, idEDT_price, idEDT_description;
+    private TextView max_price;
+    private ImageView idIMG_preview;
+    private Button idBTN_upload_image;
+    private DatabaseReference databaseReference;
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private StorageReference storageReference;
+    private String itemID;
+    private SwipeRefreshLayout add_item_swipe_container;
+    private AutoCompleteTextView idACT_typeDropdown, idACT_genderDropdown, idACT_sizeDropdown;
+    private ActivityResultLauncher<Intent> someActivityResultLauncher;
+    private String[] types;
+    private String[] gender;
+    private String[] sizes;
+    private String randomUUID;
+    private Uri imageUri = null;
+    private String imageLinkFireBase;
+    private Bitmap bitmap;
+    private byte[] dataToSend;
+    private final ObservableBoolean uploadImageToFirebase = new ObservableBoolean();
+    private final ObservableBoolean checkImageLinkFirebase = new ObservableBoolean();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,7 +101,7 @@ public class AddItemFragment extends Fragment {
         types = getResources().getStringArray(R.array.clothe_type);
         gender = getResources().getStringArray(R.array.gender);
         sizes = getResources().getStringArray(R.array.sizes);
-        storage = FirebaseStorage.getInstance();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         idEDT_title = view.findViewById(R.id.idEDT_title);
         idEDT_price = view.findViewById(R.id.idEDT_price);
@@ -118,13 +112,11 @@ public class AddItemFragment extends Fragment {
         idACT_genderDropdown = view.findViewById(R.id.idACT_genderDropdown);
         idACT_sizeDropdown = view.findViewById(R.id.idACT_sizeDropdown);
         max_price = view.findViewById(R.id.max_price);
-        idBTN_add_clothe = view.findViewById(R.id.idBTN_add_clothe);
-        idPBLoading = view.findViewById(R.id.idPBLoading);
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        Button idBTN_add_clothe = view.findViewById(R.id.idBTN_add_clothe);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
         add_item_swipe_container = view.findViewById(R.id.add_item_swipe_container);
-        String userId = mAuth.getCurrentUser().getUid();
-
+        String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
 
         uploadImageToFirebase.setOnBooleanChangeListener(new OnBooleanChangeListener() {
@@ -146,19 +138,35 @@ public class AddItemFragment extends Fragment {
                         }
                     });
                 }
-
+            }
+        });
+        idACT_typeDropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                idACT_typeDropdown.setTextColor(getResources().getColor(R.color.white));
+            }
+        });
+        idACT_genderDropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                idACT_genderDropdown.setTextColor(getResources().getColor(R.color.white));
+            }
+        });
+        idACT_sizeDropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                idACT_sizeDropdown.setTextColor(getResources().getColor(R.color.white));
             }
         });
 
-
         ArrayAdapter<String> typeAdapter =
-                new ArrayAdapter<String>(getContext(), R.layout.drowdown_template, types);
+                new ArrayAdapter<>(getContext(), R.layout.drowdown_template, types);
         idACT_typeDropdown.setAdapter(typeAdapter);
         ArrayAdapter<String> genderAdapter =
-                new ArrayAdapter<String>(getContext(), R.layout.drowdown_template, gender);
+                new ArrayAdapter<>(getContext(), R.layout.drowdown_template, gender);
         idACT_genderDropdown.setAdapter(genderAdapter);
         ArrayAdapter<String> sizeAdapter =
-                new ArrayAdapter<String>(getContext(), R.layout.drowdown_template, sizes);
+                new ArrayAdapter<>(getContext(), R.layout.drowdown_template, sizes);
         idACT_sizeDropdown.setAdapter(sizeAdapter);
 
         someActivityResultLauncher = registerForActivityResult(
@@ -229,11 +237,11 @@ public class AddItemFragment extends Fragment {
             public void onRefresh() {
                 //Do your task
                 ArrayAdapter<String> typeAdapter =
-                        new ArrayAdapter<String>(getContext(), R.layout.drowdown_template, types);
+                        new ArrayAdapter<>(getContext(), R.layout.drowdown_template, types);
                 ArrayAdapter<String> genderAdapter =
-                        new ArrayAdapter<String>(getContext(), R.layout.drowdown_template, gender);
+                        new ArrayAdapter<>(getContext(), R.layout.drowdown_template, gender);
                 ArrayAdapter<String> sizeAdapter =
-                        new ArrayAdapter<String>(getContext(), R.layout.drowdown_template, sizes);
+                        new ArrayAdapter<>(getContext(), R.layout.drowdown_template, sizes);
                 idACT_typeDropdown.setText("Choose Clothe");
                 idACT_typeDropdown.setAdapter(typeAdapter);
                 idACT_genderDropdown.setText("Choose Gender");
@@ -301,6 +309,7 @@ public class AddItemFragment extends Fragment {
                                         fragmentTransaction.commit();
                                         Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
                                     }
+
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -335,7 +344,7 @@ public class AddItemFragment extends Fragment {
             final ProgressDialog progressDialog = new ProgressDialog(getContext());
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
-            putFileUriToFirebase = storageReference.child("images/" + randomUUID);
+            StorageReference putFileUriToFirebase = storageReference.child("images/" + randomUUID);
             putFileUriToFirebase.putBytes(file)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -353,7 +362,7 @@ public class AddItemFragment extends Fragment {
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
                             double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                                     .getTotalByteCount());
                             progressDialog.setMessage("Uploaded " + (int) progress + "%");
@@ -364,10 +373,10 @@ public class AddItemFragment extends Fragment {
 
 
     public interface OnBooleanChangeListener {
-        public void onBooleanChanged(boolean newState);
+        void onBooleanChanged(boolean newState);
     }
 
-    public class ObservableBoolean {
+    public static class ObservableBoolean {
         private OnBooleanChangeListener listener;
 
         private boolean value = false;

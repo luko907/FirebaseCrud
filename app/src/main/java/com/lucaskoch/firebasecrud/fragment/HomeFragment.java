@@ -5,14 +5,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,20 +32,16 @@ import com.lucaskoch.firebasecrud.model.ItemRVModel;
 
 import java.util.ArrayList;
 
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 public class HomeFragment extends Fragment {
-    RecyclerView idRV_clothes;
-    ProgressBar idPB_homeProgressBar;
-    FloatingActionButton idFA_btnAdd;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
-    ConstraintLayout home_constraint_layout;
-    ArrayList<ItemRVModel> itemRVModelArrayList;
-    SwipeRefreshLayout home_swipe_container;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private ProgressBar idPB_homeProgressBar;
+    private ArrayList<ItemRVModel> itemRVModelArrayList;
+    private SwipeRefreshLayout home_swipe_container;
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
 
     @Override
@@ -59,10 +54,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String userId = mAuth.getCurrentUser().getUid();
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
-        idFA_btnAdd = view.findViewById(R.id.idFA_btnAdd);
-        idRV_clothes = view.findViewById(R.id.idRV_clothes);
+        String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        FloatingActionButton idFA_btnAdd = view.findViewById(R.id.idFA_btnAdd);
+        RecyclerView idRV_clothes = view.findViewById(R.id.idRV_clothes);
         itemRVModelArrayList = new ArrayList<>();
         ItemRVAdapter itemRVAdapter = new ItemRVAdapter(itemRVModelArrayList);
         idRV_clothes.setLayoutManager(new LinearLayoutManager(getContext()));

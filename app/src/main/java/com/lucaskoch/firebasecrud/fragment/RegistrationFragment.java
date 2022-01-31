@@ -12,7 +12,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
 import com.lucaskoch.firebasecrud.OnEmailCheckListener;
 import com.lucaskoch.firebasecrud.R;
@@ -38,13 +36,10 @@ import java.util.TimerTask;
 
 
 public class RegistrationFragment extends Fragment {
-    TextInputEditText idEdtUserName, idEdtUserPassword, idEdtUserConfirmPassword;
-    Button idbtnRegister;
-    ProgressBar idPBLoading;
-    FirebaseAuth mAuth;
-    TextView idTVLogin;
-    SwipeRefreshLayout swipeLayout;
-    FirebaseUser user;
+    private TextInputEditText idEdtUserName, idEdtUserPassword, idEdtUserConfirmPassword;
+    private ProgressBar idPBLoading;
+    private FirebaseAuth mAuth;
+    private SwipeRefreshLayout swipeLayout;
 
 
     @Override
@@ -59,11 +54,11 @@ public class RegistrationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         idEdtUserName = view.findViewById(R.id.idEdtUserName);
-        idbtnRegister = view.findViewById(R.id.idbtnRegister);
+        Button idbtnRegister = view.findViewById(R.id.idbtnRegister);
         idEdtUserPassword = view.findViewById(R.id.idEdtUserPassword);
         idEdtUserConfirmPassword = view.findViewById(R.id.idEdtUserConfirmPassword);
         idPBLoading = view.findViewById(R.id.idPBLoading);
-        idTVLogin = view.findViewById(R.id.idTVLogin);
+        TextView idTVLogin = view.findViewById(R.id.idTVLogin);
         mAuth = FirebaseAuth.getInstance();
         swipeLayout = view.findViewById(R.id.registration_swipe_container);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
