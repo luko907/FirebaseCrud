@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,6 +46,7 @@ public class HomeFragment extends Fragment {
     ConstraintLayout home_constraint_layout;
     ArrayList<ItemRVModel> itemRVModelArrayList;
     SwipeRefreshLayout home_swipe_container;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
 
     @Override
@@ -56,16 +59,18 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        databaseReference = FirebaseDatabase.getInstance().getReference("clothes");
+        String userId = mAuth.getCurrentUser().getUid();
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
         idFA_btnAdd = view.findViewById(R.id.idFA_btnAdd);
         idRV_clothes = view.findViewById(R.id.idRV_clothes);
         itemRVModelArrayList = new ArrayList<>();
         ItemRVAdapter itemRVAdapter = new ItemRVAdapter(itemRVModelArrayList);
         idRV_clothes.setLayoutManager(new LinearLayoutManager(getContext()));
         idRV_clothes.setAdapter(itemRVAdapter);
-        idPB_homeProgressBar =view.findViewById(R.id.idPB_homeProgressBar);
+        idPB_homeProgressBar = view.findViewById(R.id.idPB_homeProgressBar);
         idPB_homeProgressBar.setVisibility(View.VISIBLE);
         home_swipe_container = view.findViewById(R.id.home_swipe_container);
+
         home_swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
@@ -93,6 +98,7 @@ public class HomeFragment extends Fragment {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+               /* Log.v("Tag", "Snapshot "+ snapshot.toString());*/
                 if (!snapshot.exists()) {
                     AddItemFragment addItemFragment = new AddItemFragment();
                     FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
@@ -100,10 +106,8 @@ public class HomeFragment extends Fragment {
                     fragmentTransaction.commit();
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
         databaseReference.addChildEventListener(new ChildEventListener() {

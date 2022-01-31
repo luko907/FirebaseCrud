@@ -18,6 +18,8 @@
     <string name="confirm_your_password">Confirm Password</string>
     <string name="register">Register</string>
     <string name="already_a_user_login_here">Already a User? Login Here</string>
+    <string name="registration">Registration</string>
+    <string name="choose_size">Choose Size</string>
     <string-array name="clothe_type">
         <item>T-Shirt</item>
         <item>Jean</item>

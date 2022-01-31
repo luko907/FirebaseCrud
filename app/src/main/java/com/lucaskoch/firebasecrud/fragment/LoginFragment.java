@@ -173,9 +173,10 @@ public class LoginFragment extends Fragment {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-           /* Intent i = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(i);
-            this.finish();*/
+            HomeFragment homeFragment = new HomeFragment();
+            FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
+            fragmentTransaction.commit();
         }
     }
 }

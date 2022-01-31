@@ -27,6 +27,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,6 +73,7 @@ public class AddItemFragment extends Fragment {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     FirebaseStorage storage;
+    FirebaseAuth mAuth= FirebaseAuth.getInstance();
     StorageReference storageReference;
     StorageReference putFileUriToFirebase;
     String itemID;
@@ -118,8 +121,10 @@ public class AddItemFragment extends Fragment {
         idBTN_add_clothe = view.findViewById(R.id.idBTN_add_clothe);
         idPBLoading = view.findViewById(R.id.idPBLoading);
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("clothes");
+        databaseReference = firebaseDatabase.getReference("Users");
         add_item_swipe_container = view.findViewById(R.id.add_item_swipe_container);
+        String userId = mAuth.getCurrentUser().getUid();
+
 
 
         uploadImageToFirebase.setOnBooleanChangeListener(new OnBooleanChangeListener() {
@@ -270,7 +275,7 @@ public class AddItemFragment extends Fragment {
                                     idEDT_title.requestFocus();
                                 } else {
                                     uploadImage(dataToSend);
-                                    databaseReference.child(itemID).setValue(itemRVModel);
+                                    databaseReference.child(userId).child(itemID).setValue(itemRVModel);
                                 }
                             }
 
@@ -284,7 +289,7 @@ public class AddItemFragment extends Fragment {
                         @Override
                         public void onBooleanChanged(boolean newState) {
                             if (newState) {
-                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("clothes").child(itemRVModel.getItemID());
+                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users").child(userId).child(itemRVModel.getItemID());
                                 mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
