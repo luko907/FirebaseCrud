@@ -64,21 +64,18 @@ public class HomeFragment extends Fragment {
         idRV_clothes.setAdapter(itemRVAdapter);
         idPB_homeProgressBar = view.findViewById(R.id.idPB_homeProgressBar);
         idPB_homeProgressBar.setVisibility(View.VISIBLE);
-        home_swipe_container = view.findViewById(R.id.home_swipe_container);
+      home_swipe_container = view.findViewById(R.id.home_swipe_container);
 
         home_swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
             public void onRefresh() {
                 //Do your task
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        home_swipe_container.setRefreshing(false);
-                    }
-                }, 1000L);
-
-
+                HomeFragment homeFragment = new HomeFragment();
+                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
+                fragmentTransaction.commit();
+                home_swipe_container.setRefreshing(false);
             }
         });
         idFA_btnAdd.setOnClickListener(new View.OnClickListener() {
