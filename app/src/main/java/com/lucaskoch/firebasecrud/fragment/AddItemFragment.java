@@ -189,7 +189,8 @@ public class AddItemFragment extends Fragment {
                                                 cr,
                                                 imageUri);
                                 ByteArrayOutputStream temp = new ByteArrayOutputStream();
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 25, temp);
+                                bitmap = resizeImage(bitmap,600,true);
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, temp);
                                 dataToSend = temp.toByteArray();
                                 idIMG_preview.setImageBitmap(bitmap);
                             } catch (IOException e) {
@@ -396,6 +397,18 @@ public class AddItemFragment extends Fragment {
                 listener.onBooleanChanged(value);
             }
         }
+    }
+    public static Bitmap resizeImage(Bitmap realImage, float maxImageSize,
+                                     boolean filter) {
+        float ratio = Math.min(
+                (float) maxImageSize / realImage.getWidth(),
+                (float) maxImageSize / realImage.getHeight());
+        int width = Math.round((float) ratio * realImage.getWidth());
+        int height = Math.round((float) ratio * realImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
     }
 }
 

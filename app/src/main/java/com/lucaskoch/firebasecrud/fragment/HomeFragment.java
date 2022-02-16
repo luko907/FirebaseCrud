@@ -64,7 +64,13 @@ public class HomeFragment extends Fragment {
         idRV_clothes.setAdapter(itemRVAdapter);
         idPB_homeProgressBar = view.findViewById(R.id.idPB_homeProgressBar);
         idPB_homeProgressBar.setVisibility(View.VISIBLE);
-      home_swipe_container = view.findViewById(R.id.home_swipe_container);
+        home_swipe_container = view.findViewById(R.id.home_swipe_container);
+
+
+
+
+
+
 
         home_swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -90,7 +96,7 @@ public class HomeFragment extends Fragment {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-               /* Log.v("Tag", "Snapshot "+ snapshot.toString());*/
+                /* Log.v("Tag", "Snapshot "+ snapshot.toString());*/
                 if (!snapshot.exists()) {
                     AddItemFragment addItemFragment = new AddItemFragment();
                     FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
@@ -98,6 +104,7 @@ public class HomeFragment extends Fragment {
                     fragmentTransaction.commit();
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
