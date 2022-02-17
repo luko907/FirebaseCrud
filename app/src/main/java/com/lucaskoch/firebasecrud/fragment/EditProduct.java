@@ -50,6 +50,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.lucaskoch.firebasecrud.R;
 import com.lucaskoch.firebasecrud.model.ItemRVModel;
 
@@ -57,6 +58,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 
@@ -274,60 +277,66 @@ public class EditProduct extends Fragment {
                 String img = Objects.requireNonNull(idBTN_upload_image.getText()).toString();
                 String size = Objects.requireNonNull(idACT_sizeDropdown.getText()).toString();
                 if (isNetworkConnected()) {
-                        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if(snapshot.child(userId).child(title.toLowerCase(Locale.ROOT)).exists()){
-                                    Toast.makeText(getContext(), "Product already exists...", Toast.LENGTH_SHORT).show();
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.child(userId).child(itemId).child("title").getValue().equals(title.toLowerCase(Locale.ROOT))) {
+                                Toast.makeText(getContext(), "Product already exists...", Toast.LENGTH_SHORT).show();
+                            } else {
+                                /////////////////Modificar!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                if (!TextUtils.isEmpty(price)) {
+                                    databaseReference.child(userId).child(itemId).child("price").setValue(price);
                                 }else{
-                                    /////////////////Modificar!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                    storageReference.child("images/" + imgUUID).delete();
-                                    uploadImage(dataToSend);
-                                    if (TextUtils.isEmpty(price)) {
-                                        databaseReference.child(userId).child(itemId).child("price").setValue(snapshot.child(userId).child(itemId).child("price").getValue());
-                                    }
-                                    if (TextUtils.isEmpty(description)) {
-                                        databaseReference.child(userId).child(itemId).child("description").setValue(snapshot.child(userId).child(itemId).child("description").getValue());
-                                    }
-                                    if (!databaseReference.child(userId).child(itemId).child("gender").getKey().equals(gender)) {
-                                        databaseReference.child(userId).child(itemId).child("gender").setValue(gender);
-                                    }
-                                    if (!databaseReference.child(userId).child(itemId).child("type").getKey().equals(type)) {
-                                        databaseReference.child(userId).child(itemId).child("type").setValue(type);
-                                    }
+                                    databaseReference.child(userId).child(itemId).child("price").setValue(snapshot.child(userId).child(itemId).child("price").getValue());
+                                }
+                                if (TextUtils.isEmpty(description)) {
+                                    databaseReference.child(userId).child(itemId).child("description").setValue(snapshot.child(userId).child(itemId).child("description").getValue());
+                                }
+                                if (!databaseReference.child(userId).child(itemId).child("gender").getKey().equals(gender)) {
+                                    databaseReference.child(userId).child(itemId).child("gender").setValue(gender);
+                                }
+                                if (!databaseReference.child(userId).child(itemId).child("type").getKey().equals(type)) {
+                                    databaseReference.child(userId).child(itemId).child("type").setValue(type);
+                                }
 
-                                    if (!snapshot.child(userId).child(itemId).child("size").getValue().equals(size)) {
-                                        databaseReference.child(userId).child(itemId).child("size").setValue(size);
-                                    }
-                                    if (!databaseReference.child(userId).child(itemId).child("title").getKey().equals(title)) {
-                                            databaseReference.child(userId).child(itemId).child("itemID").setValue(title.toLowerCase(Locale.ROOT));
-                                            databaseReference.child(userId).child(itemId).child("title").setValue(title);
-                                            databaseReference.child(userId).child(itemId).get().addOnSuccessListener(dataSnapshot -> {
-                                                databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).setValue(dataSnapshot.getValue());
-                                                databaseReference.child(userId).child(itemId).removeValue();
-                                            });
-                                    }
+                                if (!snapshot.child(userId).child(itemId).child("size").getValue().equals(size)) {
+                                    databaseReference.child(userId).child(itemId).child("size").setValue(size);
+                                }
+                                if (!TextUtils.isEmpty(title)) {
+                                    databaseReference.child(userId).child(itemId).child("itemID").setValue(title.toLowerCase(Locale.ROOT));
+                                    databaseReference.child(userId).child(itemId).child("title").setValue(title);
+                                    databaseReference.child(userId).child(itemId).get().addOnSuccessListener(dataSnapshot -> {
+                                        databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).setValue(dataSnapshot.getValue());
+                                        databaseReference.child(userId).child(itemId).removeValue();
+                                    });
+                                }else{
+                                    databaseReference.child(userId).child(itemId).child("title").setValue(snapshot.child(userId).child(itemId).child("title").getValue());
                                 }
                             }
+                        }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                            }
-                        });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
 
                     checkImageLinkFirebase.setOnBooleanChangeListener(new AddItemFragment.OnBooleanChangeListener() {
                         @Override
                         public void onBooleanChanged(boolean newState) {
                             if (newState) {
-                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users").child(userId).child(title.toLowerCase(Locale.ROOT));
+                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users").child(userId);
                                 mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         /*      Log.v("Tag","imagelink" + imageLinkFireBase);*/
+                                        if(TextUtils.isEmpty(title)){
+                                            mDatabase.child(itemId).child("img").setValue(imageLinkFireBase);
+                                            mDatabase.child(itemId).child("imgUUID").setValue(randomUUID);
+                                        }else{
+                                            mDatabase.child(title.toLowerCase(Locale.ROOT)).child("img").setValue(imageLinkFireBase);
+                                            mDatabase.child(title.toLowerCase(Locale.ROOT)).child("imgUUID").setValue(randomUUID);
+                                        }
 
-                                        databaseReference.child(userId).child(itemId).child("imgUUID").setValue(randomUUID);
-                                        databaseReference.child(userId).child(itemId).child("img").setValue(img);
-                                        mDatabase.child("img").setValue(imageLinkFireBase);
                                         HomeFragment homeFragment = new HomeFragment();
                                         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                                         fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
@@ -344,12 +353,16 @@ public class EditProduct extends Fragment {
 
                         }
                     });
-                    if(bitmap == null){
+                    if (bitmap == null) {
                         HomeFragment homeFragment = new HomeFragment();
                         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
                         fragmentTransaction.commit();
+                        ProcessPhoenix.triggerRebirth(requireContext());
                         Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                    } else {
+                        storageReference.child("images/" + imgUUID).delete();
+                        uploadImage(dataToSend);
                     }
                 } else {
                     Toast.makeText(getContext(), "No internet connexion", Toast.LENGTH_LONG).show();
