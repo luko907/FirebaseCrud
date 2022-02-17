@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.lucaskoch.firebasecrud.R;
 import com.squareup.picasso.Picasso;
@@ -35,11 +36,12 @@ import java.util.TimerTask;
 
 
 public class ProductDetails extends Fragment {
-    TextView idTV_title,idTV_price,idTV_description,idTV_type_gender, idTV_size_number;
+    TextView idTV_title, idTV_price, idTV_description, idTV_type_gender, idTV_size_number;
     ImageView idIV_img;
     SwipeRefreshLayout product_detail_swipe_container;
-    MaterialButton idBTN_delete;
+    MaterialButton idBTN_delete,idBTN_edit;
     DatabaseReference databaseReference;
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,13 +58,14 @@ public class ProductDetails extends Fragment {
 
         Bundle bundle = this.getArguments();
         assert bundle != null;
-        String itemId = bundle.getString("itemId");
+        String itemId = bundle.getString("id");
         String title = bundle.getString("title");
         String price = bundle.getString("price");
         String image = bundle.getString("image");
         String type_gender = bundle.getString("type_gender");
         String description = bundle.getString("description");
         String size = bundle.getString("size");
+        String imgUUID = bundle.getString("imgUUID");
         product_detail_swipe_container = view.findViewById(R.id.product_detail_swipe_container);
         idTV_title = view.findViewById(R.id.idTV_title);
         idTV_description = view.findViewById(R.id.idTV_description);
@@ -81,9 +84,25 @@ public class ProductDetails extends Fragment {
             @Override
             public void onRefresh() {
                 //Do your task
-                        product_detail_swipe_container.setRefreshing(false);
-                    }
+                product_detail_swipe_container.setRefreshing(false);
+            }
         });
+        idBTN_edit = view.findViewById(R.id.idBTN_edit);
+
+        idBTN_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle2 = new Bundle();
+                bundle2.putString("imgUUID",imgUUID);
+                bundle2.putString("itemId",itemId);
+                EditProduct editProduct = new EditProduct();
+                editProduct.setArguments(bundle2);
+                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frameLayout_fragment_container, editProduct).addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
         idBTN_delete = view.findViewById(R.id.idBTN_delete);
         idBTN_delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,27 +115,12 @@ public class ProductDetails extends Fragment {
 
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
-
-                       databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                                    Log.v("Tag","Message = "+userId);
-                                   /* databaseReference.child(userId).child(itemId).removeValue();*/
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-
-
-
+                        databaseReference = firebaseDatabase.getReference("Users");
+                        String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+                        databaseReference.child(userId).child(itemId).removeValue();
                         HomeFragment homeFragment = new HomeFragment();
                         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
+                        fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment);
                         fragmentTransaction.commit();
                         Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
                     }

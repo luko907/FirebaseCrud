@@ -2,6 +2,7 @@ package com.lucaskoch.firebasecrud.adapter;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lucaskoch.firebasecrud.R;
+import com.lucaskoch.firebasecrud.fragment.EditProduct;
 import com.lucaskoch.firebasecrud.fragment.ProductDetails;
 import com.lucaskoch.firebasecrud.model.ItemRVModel;
 import com.squareup.picasso.Picasso;
@@ -52,17 +54,15 @@ public class ItemRVAdapter extends RecyclerView.Adapter<ItemRVAdapter.ViewHolder
             public void onClick(View v) {
 
                 Bundle bundle = new Bundle();
+
                 bundle.putString("title",itemRVModelArrayList.get(position).getTitle().toString());
                 bundle.putString("price",itemRVModelArrayList.get(position).getPrice().toString());
                 bundle.putString("size",itemRVModelArrayList.get(position).getSize().toString());
                 bundle.putString("id",itemRVModelArrayList.get(position).getItemID().toString());
-
-
                 bundle.putString("type_gender",itemRVModelArrayList.get(position).getType().toString() + " | " + itemRVModelArrayList.get(position).getGender().toString());
-
-
                 bundle.putString("description",itemRVModelArrayList.get(position).getDescription().toString());
                 bundle.putString("image", itemRVModelArrayList.get(position).getImg());
+                bundle.putString("imgUUID",itemRVModelArrayList.get(position).getImgUUID().toString());
                 ProductDetails productDetails = new ProductDetails();
                 productDetails.setArguments(bundle);
                 FragmentTransaction fragmentTransaction = ((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction();

@@ -5,11 +5,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
-
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -40,6 +38,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -54,7 +53,6 @@ import com.google.firebase.storage.UploadTask;
 import com.lucaskoch.firebasecrud.R;
 import com.lucaskoch.firebasecrud.model.ItemRVModel;
 
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Locale;
@@ -62,41 +60,41 @@ import java.util.Objects;
 import java.util.UUID;
 
 
-public class AddItemFragment extends Fragment {
-
+public class EditProduct extends Fragment {
     private TextInputEditText idEDT_title, idEDT_price, idEDT_description;
     private TextView max_price;
     private ImageView idIMG_preview;
-    private Button idBTN_upload_image;
+    private MaterialButton idBTN_upload_image, idBTN_accept;
     private DatabaseReference databaseReference;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private StorageReference storageReference;
-    private String itemID;
+    private String itemId;
     private SwipeRefreshLayout add_item_swipe_container;
     private AutoCompleteTextView idACT_typeDropdown, idACT_genderDropdown, idACT_sizeDropdown;
     private ActivityResultLauncher<Intent> someActivityResultLauncher;
     private String[] types;
     private String[] gender;
-    private String[] sizes;
     private String randomUUID;
+    private String[] sizes;
     private Uri imageUri = null;
     private String imageLinkFireBase;
     private Bitmap bitmap;
     private byte[] dataToSend;
-    private final ObservableBoolean uploadImageToFirebase = new ObservableBoolean();
-    private final ObservableBoolean checkImageLinkFirebase = new ObservableBoolean();
+    private final EditProduct.ObservableBoolean uploadImageToFirebase = new EditProduct.ObservableBoolean();
+    private final EditProduct.ObservableBoolean checkImageLinkFirebase = new EditProduct.ObservableBoolean();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_item, container, false);
+        return inflater.inflate(R.layout.fragment_edit_product, container, false);
     }
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         randomUUID = UUID.randomUUID().toString();
         types = getResources().getStringArray(R.array.clothe_type);
@@ -106,6 +104,7 @@ public class AddItemFragment extends Fragment {
         storageReference = storage.getReference();
         idEDT_title = view.findViewById(R.id.idEDT_title);
         idEDT_price = view.findViewById(R.id.idEDT_price);
+        idBTN_accept = view.findViewById(R.id.idBTN_accept);
         idBTN_upload_image = view.findViewById(R.id.idBTN_upload_image);
         idIMG_preview = view.findViewById(R.id.idIMG_preview);
         idEDT_description = view.findViewById(R.id.idEDT_description);
@@ -113,14 +112,19 @@ public class AddItemFragment extends Fragment {
         idACT_genderDropdown = view.findViewById(R.id.idACT_genderDropdown);
         idACT_sizeDropdown = view.findViewById(R.id.idACT_sizeDropdown);
         max_price = view.findViewById(R.id.max_price);
-        Button idBTN_add_clothe = view.findViewById(R.id.idBTN_accept);
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
         add_item_swipe_container = view.findViewById(R.id.edit_item_swipe_container);
         String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
 
-        uploadImageToFirebase.setOnBooleanChangeListener(new OnBooleanChangeListener() {
+        Bundle bundle = this.getArguments();
+        assert bundle != null;
+        String imgUUID = bundle.getString("imgUUID");
+        itemId = bundle.getString("itemId");
+
+
+        uploadImageToFirebase.setOnBooleanChangeListener(new AddItemFragment.OnBooleanChangeListener() {
             @Override
             public void onBooleanChanged(boolean newState) {
                 if (newState) {
@@ -178,7 +182,7 @@ public class AddItemFragment extends Fragment {
                         if (result.getResultCode() == Activity.RESULT_OK) {
                             final ContentResolver cr = requireActivity().getContentResolver();
                             imageUri = Objects.requireNonNull(result.getData()).getData();
-            /*                Log.v("Tag","imageUri :"+ imageUri.toString());
+                /*            Log.v("Tag","imageUri :"+ imageUri.toString());
                             Log.v("Tag","result.getData() :"+result.getData());
                             Log.v("Tag","result.getData()).getData() :"+result.getData().getData());*/
                             bitmap = null;
@@ -190,7 +194,7 @@ public class AddItemFragment extends Fragment {
                                                 cr,
                                                 imageUri);
                                 ByteArrayOutputStream temp = new ByteArrayOutputStream();
-                                bitmap = resizeImage(bitmap,600,true);
+                                bitmap = resizeImage(bitmap, 600, true);
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, temp);
                                 dataToSend = temp.toByteArray();
                                 idIMG_preview.setImageBitmap(bitmap);
@@ -217,7 +221,7 @@ public class AddItemFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-/*                Log.v("Tag", "Start " + start);
+      /*        Log.v("Tag", "Start " + start);
                 Log.v("Tag", "Before " + before);*/
                 if ((start - before) < 4) {
                     max_price.setVisibility(View.GONE);
@@ -259,7 +263,7 @@ public class AddItemFragment extends Fragment {
             }
         });
 
-        idBTN_add_clothe.setOnClickListener(new View.OnClickListener() {
+        idBTN_accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String title = Objects.requireNonNull(idEDT_title.getText()).toString();
@@ -269,41 +273,60 @@ public class AddItemFragment extends Fragment {
                 String type = Objects.requireNonNull(idACT_typeDropdown.getText()).toString();
                 String img = Objects.requireNonNull(idBTN_upload_image.getText()).toString();
                 String size = Objects.requireNonNull(idACT_sizeDropdown.getText()).toString();
-                itemID = title.toLowerCase(Locale.ROOT);
-                ItemRVModel itemRVModel = new ItemRVModel(title, img, type, gender, size, price, description, itemID,randomUUID);
                 if (isNetworkConnected()) {
-                    if (TextUtils.isEmpty(title) || TextUtils.isEmpty(price) || TextUtils.isEmpty(description)) {
-                        Toast.makeText(getContext(), "Please fill empty values...", Toast.LENGTH_SHORT).show();
-                    } else {
                         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.child(itemRVModel.getItemID().toLowerCase(Locale.ROOT)).exists()) {
-                                    /*Log.v("Tag", "ID exist : "+ snapshot.child(courseRVModel.getCourseID().toLowerCase(Locale.ROOT)));*/
-                                    Toast.makeText(getContext(), "Data exist", Toast.LENGTH_SHORT).show();
-                                    idEDT_title.setText("");
-                                    idEDT_title.requestFocus();
-                                } else {
+                                if(snapshot.child(userId).child(title.toLowerCase(Locale.ROOT)).exists()){
+                                    Toast.makeText(getContext(), "Product already exists...", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    /////////////////Modificar!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                    storageReference.child("images/" + imgUUID).delete();
                                     uploadImage(dataToSend);
-                                    databaseReference.child(userId).child(itemID).setValue(itemRVModel);
+                                    if (TextUtils.isEmpty(price)) {
+                                        databaseReference.child(userId).child(itemId).child("price").setValue(snapshot.child(userId).child(itemId).child("price").getValue());
+                                    }
+                                    if (TextUtils.isEmpty(description)) {
+                                        databaseReference.child(userId).child(itemId).child("description").setValue(snapshot.child(userId).child(itemId).child("description").getValue());
+                                    }
+                                    if (!databaseReference.child(userId).child(itemId).child("gender").getKey().equals(gender)) {
+                                        databaseReference.child(userId).child(itemId).child("gender").setValue(gender);
+                                    }
+                                    if (!databaseReference.child(userId).child(itemId).child("type").getKey().equals(type)) {
+                                        databaseReference.child(userId).child(itemId).child("type").setValue(type);
+                                    }
+
+                                    if (!snapshot.child(userId).child(itemId).child("size").getValue().equals(size)) {
+                                        databaseReference.child(userId).child(itemId).child("size").setValue(size);
+                                    }
+                                    if (!databaseReference.child(userId).child(itemId).child("title").getKey().equals(title)) {
+                                            databaseReference.child(userId).child(itemId).child("itemID").setValue(title.toLowerCase(Locale.ROOT));
+                                            databaseReference.child(userId).child(itemId).child("title").setValue(title);
+                                            databaseReference.child(userId).child(itemId).get().addOnSuccessListener(dataSnapshot -> {
+                                                databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).setValue(dataSnapshot.getValue());
+                                                databaseReference.child(userId).child(itemId).removeValue();
+                                            });
+                                    }
                                 }
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
                             }
                         });
-                    }
-                    checkImageLinkFirebase.setOnBooleanChangeListener(new OnBooleanChangeListener() {
+
+                    checkImageLinkFirebase.setOnBooleanChangeListener(new AddItemFragment.OnBooleanChangeListener() {
                         @Override
                         public void onBooleanChanged(boolean newState) {
                             if (newState) {
-                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users").child(userId).child(itemRVModel.getItemID());
+                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users").child(userId).child(title.toLowerCase(Locale.ROOT));
                                 mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         /*      Log.v("Tag","imagelink" + imageLinkFireBase);*/
+
+                                        databaseReference.child(userId).child(itemId).child("imgUUID").setValue(randomUUID);
+                                        databaseReference.child(userId).child(itemId).child("img").setValue(img);
                                         mDatabase.child("img").setValue(imageLinkFireBase);
                                         HomeFragment homeFragment = new HomeFragment();
                                         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
@@ -321,6 +344,13 @@ public class AddItemFragment extends Fragment {
 
                         }
                     });
+                    if(bitmap == null){
+                        HomeFragment homeFragment = new HomeFragment();
+                        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
+                        fragmentTransaction.commit();
+                        Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(getContext(), "No internet connexion", Toast.LENGTH_LONG).show();
                 }
@@ -379,11 +409,11 @@ public class AddItemFragment extends Fragment {
     }
 
     public static class ObservableBoolean {
-        private OnBooleanChangeListener listener;
+        private AddItemFragment.OnBooleanChangeListener listener;
 
         private boolean value = false;
 
-        public void setOnBooleanChangeListener(OnBooleanChangeListener listener) {
+        public void setOnBooleanChangeListener(AddItemFragment.OnBooleanChangeListener listener) {
             this.listener = listener;
         }
 
@@ -399,6 +429,7 @@ public class AddItemFragment extends Fragment {
             }
         }
     }
+
     public static Bitmap resizeImage(Bitmap realImage, float maxImageSize,
                                      boolean filter) {
         float ratio = Math.min(
@@ -412,4 +443,3 @@ public class AddItemFragment extends Fragment {
         return newBitmap;
     }
 }
-

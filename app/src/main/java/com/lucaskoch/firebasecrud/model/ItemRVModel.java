@@ -12,12 +12,15 @@ public class ItemRVModel {
     private String price;
     private String description;
     private String itemID;
+    private String imgUUID;
+
+
 
     public ItemRVModel() {
     }
 
 
-    public ItemRVModel(String title, String img, String type, String gender, String size, String price, String description, String itemID) {
+    public ItemRVModel(String title, String img, String type, String gender, String size, String price, String description, String itemID,String imgUUID) {
         this.title = title;
         this.img = img;
         this.type = type;
@@ -26,6 +29,7 @@ public class ItemRVModel {
         this.price = price;
         this.description = description;
         this.itemID = itemID;
+        this.imgUUID = imgUUID;
     }
 
     public String getTitle() {
@@ -91,4 +95,13 @@ public class ItemRVModel {
     public void setItemID(String itemID) {
         this.itemID = itemID;
     }
+
+    public String getImgUUID() {
+        return imgUUID;
+    }
+
+    public void setImgUUID(String imgUUID) {
+        this.imgUUID = imgUUID;
+    }
+
 }
