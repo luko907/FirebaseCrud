@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -67,7 +68,7 @@ public class AddItemFragment extends Fragment {
     private TextInputEditText idEDT_title, idEDT_price, idEDT_description;
     private TextView max_price;
     private ImageView idIMG_preview;
-    private Button idBTN_upload_image;
+    private MaterialButton idBTN_upload_image,idBTN_cancel_img_preview;
     private DatabaseReference databaseReference;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private StorageReference storageReference;
@@ -107,6 +108,7 @@ public class AddItemFragment extends Fragment {
         idEDT_title = view.findViewById(R.id.idEDT_title);
         idEDT_price = view.findViewById(R.id.idEDT_price);
         idBTN_upload_image = view.findViewById(R.id.idBTN_upload_image);
+        idBTN_cancel_img_preview = view.findViewById(R.id.idBTN_cancel_img_preview);
         idIMG_preview = view.findViewById(R.id.idIMG_preview);
         idEDT_description = view.findViewById(R.id.idEDT_description);
         idACT_typeDropdown = view.findViewById(R.id.idACT_typeDropdown);
@@ -194,6 +196,7 @@ public class AddItemFragment extends Fragment {
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, temp);
                                 dataToSend = temp.toByteArray();
                                 idIMG_preview.setImageBitmap(bitmap);
+                                idBTN_cancel_img_preview.setVisibility(View.VISIBLE);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -201,7 +204,13 @@ public class AddItemFragment extends Fragment {
                     }
                 });
 
-
+        idBTN_cancel_img_preview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                idIMG_preview.setImageBitmap(null);
+                idBTN_cancel_img_preview.setVisibility(View.GONE);
+            }
+        });
         idBTN_upload_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -275,11 +284,24 @@ public class AddItemFragment extends Fragment {
                     if (TextUtils.isEmpty(title) || TextUtils.isEmpty(price) || TextUtils.isEmpty(description)) {
                         Toast.makeText(getContext(), "Please fill empty values...", Toast.LENGTH_SHORT).show();
                     } else {
-                        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        databaseReference.child(userId).child(itemID).get().addOnSuccessListener(snapshot -> {
+                            Log.v("Tag", "snapshot : "+ snapshot.getValue());
+                            if(snapshot.getValue() != null){
+                                Toast.makeText(getContext(), "Data exist", Toast.LENGTH_SHORT).show();
+                                idEDT_title.setText("");
+                                idEDT_title.requestFocus();
+                            }else{
+                                uploadImage(dataToSend);
+                                databaseReference.child(userId).child(itemID).setValue(itemRVModel);
+                            }
+                        });
+
+              /*          databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                         *//*       Log.v("Tag", "snaphot : "+ snapshot.child(userId).child(itemID).getKey());
+                                Log.v("Tag", "itemID : "+ itemID);*//*
                                 if (snapshot.child(itemRVModel.getItemID().toLowerCase(Locale.ROOT)).exists()) {
-                                    /*Log.v("Tag", "ID exist : "+ snapshot.child(courseRVModel.getCourseID().toLowerCase(Locale.ROOT)));*/
                                     Toast.makeText(getContext(), "Data exist", Toast.LENGTH_SHORT).show();
                                     idEDT_title.setText("");
                                     idEDT_title.requestFocus();
@@ -293,7 +315,7 @@ public class AddItemFragment extends Fragment {
                             public void onCancelled(@NonNull DatabaseError databaseError) {
 
                             }
-                        });
+                        });*/
                     }
                     checkImageLinkFirebase.setOnBooleanChangeListener(new OnBooleanChangeListener() {
                         @Override
