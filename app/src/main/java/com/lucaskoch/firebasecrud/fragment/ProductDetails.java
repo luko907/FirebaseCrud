@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.lucaskoch.firebasecrud.R;
 import com.squareup.picasso.Picasso;
 
@@ -42,6 +44,7 @@ public class ProductDetails extends Fragment {
     MaterialButton idBTN_delete,idBTN_edit;
     DatabaseReference databaseReference;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,9 +117,12 @@ public class ProductDetails extends Fragment {
                 alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
-                        // continue with delete
+
+                        FirebaseStorage storageIn = FirebaseStorage.getInstance();
+                        StorageReference stor = storageIn.getReference();
                         databaseReference = firebaseDatabase.getReference("Users");
                         String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+                        stor.child("images/" + userId+"/"+imgUUID).delete();
                         databaseReference.child(userId).child(itemId).removeValue();
                         HomeFragment homeFragment = new HomeFragment();
                         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();

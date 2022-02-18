@@ -93,7 +93,9 @@ public class EditProduct extends Fragment {
     private byte[] dataToSend;
     private final EditProduct.ObservableBoolean uploadImageToFirebase = new EditProduct.ObservableBoolean();
     private final EditProduct.ObservableBoolean checkImageLinkFirebase = new EditProduct.ObservableBoolean();
-
+    String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+    FirebaseStorage storageIn = FirebaseStorage.getInstance();
+    StorageReference stor = storageIn.getReference();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -133,7 +135,7 @@ public class EditProduct extends Fragment {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
         add_item_swipe_container = view.findViewById(R.id.edit_item_swipe_container);
-        String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
 
 
         Bundle bundle = this.getArguments();
@@ -186,9 +188,7 @@ public class EditProduct extends Fragment {
             @Override
             public void onBooleanChanged(boolean newState) {
                 if (newState) {
-                    FirebaseStorage storageIn = FirebaseStorage.getInstance();
-                    StorageReference stor = storageIn.getReference();
-                    stor.child("images/" + randomUUID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    stor.child("images/" + userId+"/"+randomUUID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
                             imageLinkFireBase = uri.toString();
@@ -380,7 +380,7 @@ public class EditProduct extends Fragment {
                                         /* ProcessPhoenix.triggerRebirth(requireContext());*/
                                         Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        storageReference.child("images/" + imgUUID).delete();
+                                        stor.child("images/" + userId+"/"+imgUUID).delete();
                                         uploadImage(dataToSend);
                                     }
 
@@ -430,7 +430,7 @@ public class EditProduct extends Fragment {
                                    /* ProcessPhoenix.triggerRebirth(requireContext());*/
                                     Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    storageReference.child("images/" + imgUUID).delete();
+                                    stor.child("images/" + userId+"/"+imgUUID).delete();
                                     uploadImage(dataToSend);
                                 }
                             }
@@ -507,7 +507,7 @@ public class EditProduct extends Fragment {
             final ProgressDialog progressDialog = new ProgressDialog(getContext());
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
-            StorageReference putFileUriToFirebase = storageReference.child("images/" + randomUUID);
+            StorageReference putFileUriToFirebase = storageReference.child("images/" + userId+"/"+randomUUID);
             putFileUriToFirebase.putBytes(file)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override

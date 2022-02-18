@@ -86,6 +86,7 @@ public class AddItemFragment extends Fragment {
     private byte[] dataToSend;
     private final ObservableBoolean uploadImageToFirebase = new ObservableBoolean();
     private final ObservableBoolean checkImageLinkFirebase = new ObservableBoolean();
+    String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -119,7 +120,7 @@ public class AddItemFragment extends Fragment {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
         add_item_swipe_container = view.findViewById(R.id.edit_item_swipe_container);
-        String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
 
 
         uploadImageToFirebase.setOnBooleanChangeListener(new OnBooleanChangeListener() {
@@ -128,7 +129,7 @@ public class AddItemFragment extends Fragment {
                 if (newState) {
                     FirebaseStorage storageIn = FirebaseStorage.getInstance();
                     StorageReference stor = storageIn.getReference();
-                    stor.child("images/" + randomUUID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    stor.child("images/" + userId+"/"+randomUUID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
                             /*   Log.v("Tag", "adas  " + uri);*/
@@ -296,27 +297,6 @@ public class AddItemFragment extends Fragment {
                                 databaseReference.child(userId).child(itemID).setValue(itemRVModel);
                             }
                         });
-
-              /*          databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                         *//*       Log.v("Tag", "snaphot : "+ snapshot.child(userId).child(itemID).getKey());
-                                Log.v("Tag", "itemID : "+ itemID);*//*
-                                if (snapshot.child(itemRVModel.getItemID().toLowerCase(Locale.ROOT)).exists()) {
-                                    Toast.makeText(getContext(), "Data exist", Toast.LENGTH_SHORT).show();
-                                    idEDT_title.setText("");
-                                    idEDT_title.requestFocus();
-                                } else {
-                                    uploadImage(dataToSend);
-                                    databaseReference.child(userId).child(itemID).setValue(itemRVModel);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });*/
                     }
                     checkImageLinkFirebase.setOnBooleanChangeListener(new OnBooleanChangeListener() {
                         @Override
@@ -369,7 +349,7 @@ public class AddItemFragment extends Fragment {
             final ProgressDialog progressDialog = new ProgressDialog(getContext());
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
-            StorageReference putFileUriToFirebase = storageReference.child("images/" + randomUUID);
+            StorageReference putFileUriToFirebase = storageReference.child("images/" + userId+"/"+randomUUID);
             putFileUriToFirebase.putBytes(file)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
