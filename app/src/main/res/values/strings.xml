@@ -1,25 +1,25 @@
 <resources>
     <string name="app_name">FirebaseCrud</string>
     <string name="inspect">inspect</string>
-    <string name="enter_title">Enter Title</string>
+    <string name="enter_title"><i>Enter Title</i></string>
     <string name="upload_image">Upload Image</string>
-    <string name="choose_clothe">Choose Clothe</string>
-    <string name="choose_gender">Choose Gender</string>
-    <string name="enter_size">Enter Size</string>
-    <string name="enter_price">Enter Price</string>
+    <string name="choose_clothe"><i>Choose Clothe</i></string>
+    <string name="choose_gender"><i>Choose Gender</i></string>
+    <string name="enter_size"><i>Enter Size</i></string>
+    <string name="enter_price"><i>Enter Price</i></string>
     <string name="max_price_9999">Max Price 9999</string>
-    <string name="enter_description">Enter Description</string>
+    <string name="enter_description"><i>Enter Description</i></string>
     <string name="add_item">Add Item</string>
-    <string name="enter_username">Enter Username</string>
-    <string name="enter_your_password">Enter Password</string>
+    <string name="enter_username"><i>Enter Username</i></string>
+    <string name="enter_your_password"><i>Enter Password</i></string>
     <string name="login">Login</string>
     <string name="new_user_register_here">New User? Register Here</string>
-    <string name="enter_user_name">Enter Username</string>
-    <string name="confirm_your_password">Confirm Password</string>
+    <string name="enter_user_name"><i>Enter Username</i></string>
+    <string name="confirm_your_password"><i>Confirm Password</i></string>
     <string name="register">Register</string>
     <string name="already_a_user_login_here">Already a User? Login Here</string>
     <string name="registration">Registration</string>
-    <string name="choose_size">Choose Size</string>
+    <string name="choose_size"><i>Choose Size</i></string>
     <string-array name="clothe_type">
         <item>T-Shirt</item>
         <item>Jean</item>

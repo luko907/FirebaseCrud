@@ -60,7 +60,7 @@ public class RegistrationFragment extends Fragment {
         idPBLoading = view.findViewById(R.id.idPBLoading);
         TextView idTVLogin = view.findViewById(R.id.idTVLogin);
         mAuth = FirebaseAuth.getInstance();
-        swipeLayout = view.findViewById(R.id.registration_swipe_container);
+        swipeLayout = view.findViewById(R.id.product_detail_swipe_container);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override

@@ -33,8 +33,6 @@ import com.lucaskoch.firebasecrud.model.ItemRVModel;
 import java.util.ArrayList;
 
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class HomeFragment extends Fragment {
@@ -66,19 +64,22 @@ public class HomeFragment extends Fragment {
         idPB_homeProgressBar.setVisibility(View.VISIBLE);
         home_swipe_container = view.findViewById(R.id.home_swipe_container);
 
+
+
+
+
+
+
         home_swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
             public void onRefresh() {
                 //Do your task
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        home_swipe_container.setRefreshing(false);
-                    }
-                }, 1000L);
-
-
+                HomeFragment homeFragment = new HomeFragment();
+                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
+                fragmentTransaction.commit();
+                home_swipe_container.setRefreshing(false);
             }
         });
         idFA_btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +94,7 @@ public class HomeFragment extends Fragment {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-               /* Log.v("Tag", "Snapshot "+ snapshot.toString());*/
+                /* Log.v("Tag", "Snapshot "+ snapshot.toString());*/
                 if (!snapshot.exists()) {
                     AddItemFragment addItemFragment = new AddItemFragment();
                     FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
@@ -101,6 +102,7 @@ public class HomeFragment extends Fragment {
                     fragmentTransaction.commit();
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }

@@ -2,7 +2,7 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/add_item_swipe_container"
+    android:id="@+id/edit_item_swipe_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.AddItemFragment">
@@ -13,7 +13,7 @@
     android:background="@color/blue_shade_1">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/add_course_constraint_layout"
+        android:id="@+id/edit_product_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -45,18 +45,22 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:background="@drawable/custom_button_back"
+
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/idBTN_upload_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
+            android:padding="16dp"
+            app:cornerRadius="10dp"
             android:text="@string/upload_image"
             android:textAllCaps="false"
             app:layout_constraintBottom_toTopOf="@+id/idTI_typeDropdown"
             app:layout_constraintEnd_toStartOf="@+id/idIMG_preview"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idTI_title" />
+            app:layout_constraintTop_toBottomOf="@+id/idTI_title"/>
+
 
         <ImageView
             android:id="@+id/idIMG_preview"
@@ -218,19 +222,22 @@
                 android:textSize="@dimen/_14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/idBTN_add_clothe"
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/idBTN_accept"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_32dp"
-            android:background="@drawable/custom_button_back"
             android:text="@string/add_item"
             android:textSize="@dimen/_18sp"
             android:textAllCaps="false"
+            android:padding="16dp"
+            app:cornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idTI_description" />
+            app:layout_constraintTop_toBottomOf="@+id/idTI_description"/>
+
 
         <ProgressBar
             android:id="@+id/idPB_progressBar"
@@ -245,6 +252,24 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/idBTN_cancel_img_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="#7E7777"
+            android:text="Delete Image"
+            android:textSize="10sp"
+            android:visibility="gone"
+            app:cornerRadius="6dp"
+            app:layout_constraintBottom_toTopOf="@+id/idTI_typeDropdown"
+            app:layout_constraintEnd_toEndOf="@+id/idBTN_upload_image"
+            app:layout_constraintStart_toStartOf="@+id/idBTN_upload_image"
+            app:layout_constraintTop_toBottomOf="@+id/idBTN_upload_image"
+            app:layout_constraintVertical_bias="1.0" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
