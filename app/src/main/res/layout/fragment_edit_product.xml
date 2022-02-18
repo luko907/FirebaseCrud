@@ -60,6 +60,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/idTI_title" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/idBTN_cancel_img_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="12dp"
+                android:backgroundTint="#7E7777"
+                android:text="Delete Image"
+                android:textSize="10sp"
+                android:visibility="gone"
+                app:cornerRadius="6dp"
+                app:layout_constraintBottom_toTopOf="@+id/idTI_typeDropdown"
+                app:layout_constraintEnd_toEndOf="@+id/idBTN_upload_image"
+                app:layout_constraintStart_toStartOf="@+id/idBTN_upload_image"
+                app:layout_constraintTop_toBottomOf="@+id/idBTN_upload_image"
+                app:layout_constraintVertical_bias="1.0" />
+
+
+
 
             <ImageView
                 android:id="@+id/idIMG_preview"

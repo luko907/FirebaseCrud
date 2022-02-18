@@ -209,6 +209,7 @@ public class AddItemFragment extends Fragment {
             public void onClick(View v) {
                 idIMG_preview.setImageBitmap(null);
                 idBTN_cancel_img_preview.setVisibility(View.GONE);
+                dataToSend = null;
             }
         });
         idBTN_upload_image.setOnClickListener(new View.OnClickListener() {
@@ -281,11 +282,11 @@ public class AddItemFragment extends Fragment {
                 itemID = title.toLowerCase(Locale.ROOT);
                 ItemRVModel itemRVModel = new ItemRVModel(title, img, type, gender, size, price, description, itemID,randomUUID);
                 if (isNetworkConnected()) {
-                    if (TextUtils.isEmpty(title) || TextUtils.isEmpty(price) || TextUtils.isEmpty(description)) {
+                    if (TextUtils.isEmpty(title) || TextUtils.isEmpty(price) || TextUtils.isEmpty(description) || dataToSend == null) {
                         Toast.makeText(getContext(), "Please fill empty values...", Toast.LENGTH_SHORT).show();
                     } else {
                         databaseReference.child(userId).child(itemID).get().addOnSuccessListener(snapshot -> {
-                            Log.v("Tag", "snapshot : "+ snapshot.getValue());
+                            /*Log.v("Tag", "snapshot : "+ snapshot.getValue());*/
                             if(snapshot.getValue() != null){
                                 Toast.makeText(getContext(), "Data exist", Toast.LENGTH_SHORT).show();
                                 idEDT_title.setText("");

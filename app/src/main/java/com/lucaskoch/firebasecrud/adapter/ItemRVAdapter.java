@@ -48,6 +48,7 @@ public class ItemRVAdapter extends RecyclerView.Adapter<ItemRVAdapter.ViewHolder
 
         holder.idITV_title.setText(itemRVModelArrayList.get(position).getTitle());
         holder.idITV_price.setText("$ " + itemRVModelArrayList.get(position).getPrice());
+        holder.idTV_type_gender.setText(itemRVModelArrayList.get(position).getType() + " | " + itemRVModelArrayList.get(position).getGender());
         Picasso.get().load(itemRVModelArrayList.get(position).getImg()).into(holder.idIV_img);
         holder.idCV_itemContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +81,7 @@ public class ItemRVAdapter extends RecyclerView.Adapter<ItemRVAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView idITV_title, idITV_price;
+        TextView idITV_title, idITV_price,idTV_type_gender;
         ImageView idIV_img;
         CardView idCV_itemContainer;
 
@@ -91,6 +92,7 @@ public class ItemRVAdapter extends RecyclerView.Adapter<ItemRVAdapter.ViewHolder
             idITV_title = itemView.findViewById(R.id.idITV_title);
             idITV_price = itemView.findViewById(R.id.idITV_price);
             idIV_img = itemView.findViewById(R.id.idCV_img_container);
+            idTV_type_gender = itemView.findViewById(R.id.idTV_type_gender);
             idCV_itemContainer = itemView.findViewById(R.id.idCV_itemContainer);
         }
     }

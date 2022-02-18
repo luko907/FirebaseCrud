@@ -17,6 +17,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -70,7 +71,7 @@ public class EditProduct extends Fragment {
     private TextInputEditText idEDT_title, idEDT_price, idEDT_description;
     private TextView max_price;
     private ImageView idIMG_preview;
-    private MaterialButton idBTN_upload_image, idBTN_accept;
+    private MaterialButton idBTN_upload_image, idBTN_accept,idBTN_cancel_img_preview,idBTN_cancel;
     private DatabaseReference databaseReference;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private StorageReference storageReference;
@@ -110,8 +111,10 @@ public class EditProduct extends Fragment {
         storageReference = storage.getReference();
         idEDT_title = view.findViewById(R.id.idEDT_title);
         idEDT_price = view.findViewById(R.id.idEDT_price);
+        idBTN_cancel = view.findViewById(R.id.idBTN_cancel);
         idBTN_accept = view.findViewById(R.id.idBTN_accept);
         idBTN_upload_image = view.findViewById(R.id.idBTN_upload_image);
+        idBTN_cancel_img_preview = view.findViewById(R.id.idBTN_cancel_img_preview);
         idIMG_preview = view.findViewById(R.id.idIMG_preview);
         idEDT_description = view.findViewById(R.id.idEDT_description);
         idACT_typeDropdown = view.findViewById(R.id.idACT_typeDropdown);
@@ -129,7 +132,15 @@ public class EditProduct extends Fragment {
         String imgUUID = bundle.getString("imgUUID");
         itemId = bundle.getString("itemId");
 
-
+        idBTN_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeFragment homeFragment = new HomeFragment();
+                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
         uploadImageToFirebase.setOnBooleanChangeListener(new EditProduct.OnBooleanChangeListener() {
             @Override
             public void onBooleanChanged(boolean newState) {
@@ -139,7 +150,6 @@ public class EditProduct extends Fragment {
                     stor.child("images/" + randomUUID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            /*   Log.v("Tag", "adas  " + uri);*/
                             imageLinkFireBase = uri.toString();
                             checkImageLinkFirebase.set(true);
                         }
@@ -204,6 +214,7 @@ public class EditProduct extends Fragment {
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, temp);
                                 dataToSend = temp.toByteArray();
                                 idIMG_preview.setImageBitmap(bitmap);
+                                idBTN_cancel_img_preview.setVisibility(View.VISIBLE);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -212,6 +223,14 @@ public class EditProduct extends Fragment {
                 });
 
 
+        idBTN_cancel_img_preview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                idIMG_preview.setImageBitmap(null);
+                idBTN_cancel_img_preview.setVisibility(View.GONE);
+                dataToSend = null;
+            }
+        });
         idBTN_upload_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,74 +300,105 @@ public class EditProduct extends Fragment {
                 String size = Objects.requireNonNull(idACT_sizeDropdown.getText()).toString();
 
                 if (isNetworkConnected()) {
-                    if (!TextUtils.isEmpty(title)) {
-                        databaseReference.child(userId).child(itemId).get().addOnSuccessListener(snapshot -> {
+                    databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).get().addOnSuccessListener(snapshot -> {
+                        if (snapshot.getValue() != null && !TextUtils.isEmpty(title)) {
+                            Toast.makeText(getContext(), "Name already exist", Toast.LENGTH_SHORT).show();
+                            idEDT_title.setText("");
+                            idEDT_title.requestFocus();
+                        }else{
+                            if (!TextUtils.isEmpty(title)) {
+                                databaseReference.child(userId).child(itemId).get().addOnSuccessListener(shot -> {
+                                    databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).setValue(shot.getValue());
+                                    databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("title").setValue(title);
+                                    databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("itemID").setValue(title.toLowerCase(Locale.ROOT));
+                                    if (!TextUtils.isEmpty(price)) {
+                                        databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("price").setValue(price);
+                                    } else {
+                                        databaseReference.child(userId).child(itemId).child("price").setValue(shot.child("price").getValue());
+                                    }
+                                    if (!TextUtils.isEmpty(description)) {
+                                        databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("description").setValue(description);
+                                    } else {
+                                        databaseReference.child(userId).child(itemId).child("description").setValue(shot.child("description").getValue());
+                                    }
+                                    if (gender.equals("Choose Gender")) {
+                                        databaseReference.child(userId).child(itemId).child("gender").setValue(shot.child("gender").getValue());
+                                    } else {
+                                        databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("gender").setValue(gender);
+                                    }
+                                    if (type.equals("Choose Clothe")) {
+                                        databaseReference.child(userId).child(itemId).child("type").setValue(shot.child("type").getValue());
+                                    } else {
+                                        databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("type").setValue(type);
+                                    }
+                                    if (size.equals("Choose Size")) {
+                                        databaseReference.child(userId).child(itemId).child("size").setValue(shot.child("size").getValue());
+                                    } else {
+                                        databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("size").setValue(size);
+                                    }
+                                    databaseReference.child(userId).child(itemId).removeValue();
+                                    HomeFragment homeFragment = new HomeFragment();
+                                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                                    fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
+                                    fragmentTransaction.commit();
+                                    ProcessPhoenix.triggerRebirth(requireContext());
+                                    Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                                });
+                            } else {
+                                databaseReference.child(userId).child(itemId).get().addOnSuccessListener(shot -> {
+                                    if (!TextUtils.isEmpty(price)) {
+                                        databaseReference.child(userId).child(itemId).child("price").setValue(price);
+                                    } else {
+                                        databaseReference.child(userId).child(itemId).child("price").setValue(shot.child("price").getValue());
+                                    }
+                                    if (!TextUtils.isEmpty(description)) {
+                                        databaseReference.child(userId).child(itemId).child("description").setValue(description);
+                                    } else {
+                                        databaseReference.child(userId).child(itemId).child("description").setValue(shot.child("description").getValue());
+                                    }
+                                    if (gender.equals("Choose Gender")) {
+                                        databaseReference.child(userId).child(itemId).child("gender").setValue(shot.child("gender").getValue());
+                                    } else {
+                                        databaseReference.child(userId).child(itemId).child("gender").setValue(gender);
+                                    }
+                                    if (type.equals("Choose Clothe")) {
+                                        databaseReference.child(userId).child(itemId).child("type").setValue(shot.child("type").getValue());
+                                    } else {
+                                        databaseReference.child(userId).child(itemId).child("type").setValue(type);
+                                    }
+                                    if (size.equals("Choose Size")) {
+                                        databaseReference.child(userId).child(itemId).child("size").setValue(shot.child("size").getValue());
+                                    } else {
+                                        databaseReference.child(userId).child(itemId).child("size").setValue(size);
+                                    }
+                                    if (TextUtils.isEmpty(title)) {
+                                        databaseReference.child(userId).child(itemId).child("title").setValue(shot.child("title").getValue());
+                                    }
+                                   /* HomeFragment homeFragment = new HomeFragment();
+                                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                                    fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
+                                    fragmentTransaction.commit();
+                                    ProcessPhoenix.triggerRebirth(requireContext());
+                                    Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();*/
+                                });
+                                if (bitmap == null) {
+                                    HomeFragment homeFragment = new HomeFragment();
+                                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                                    fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
+                                    fragmentTransaction.commit();
+                                    ProcessPhoenix.triggerRebirth(requireContext());
+                                    Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    storageReference.child("images/" + imgUUID).delete();
+                                    uploadImage(dataToSend);
+                                }
+                            }
 
-                            
-                            databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).setValue(snapshot.getValue());
-                            databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("title").setValue(title);
-                            databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("itemID").setValue(title.toLowerCase(Locale.ROOT));
-                            if (!TextUtils.isEmpty(price)) {
-                                databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("price").setValue(price);
-                            } else {
-                                databaseReference.child(userId).child(itemId).child("price").setValue(snapshot.child("price").getValue());
-                            }
-                            if (!TextUtils.isEmpty(description)) {
-                                databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("description").setValue(description);
-                            } else {
-                                databaseReference.child(userId).child(itemId).child("description").setValue(snapshot.child("description").getValue());
-                            }
-                            if (gender.equals("Choose Gender")) {
-                                databaseReference.child(userId).child(itemId).child("gender").setValue(snapshot.child("gender").getValue());
-                            } else {
-                                databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("gender").setValue(gender);
-                            }
-                            if (type.equals("Choose Clothe")) {
-                                databaseReference.child(userId).child(itemId).child("type").setValue(snapshot.child("type").getValue());
-                            } else {
-                                databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("type").setValue(type);
-                            }
-                            if (size.equals("Choose Size")) {
-                                databaseReference.child(userId).child(itemId).child("size").setValue(snapshot.child("size").getValue());
-                            } else {
-                                databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("size").setValue(size);
-                            }
-                            databaseReference.child(userId).child(itemId).removeValue();
-                        });
-                    } else {
-                        databaseReference.child(userId).child(itemId).get().addOnSuccessListener(snapshot -> {
-                            Log.v("Tag", "snapshot " + snapshot);
-                            if (!TextUtils.isEmpty(price)) {
-                                databaseReference.child(userId).child(itemId).child("price").setValue(price);
-                            } else {
-                                databaseReference.child(userId).child(itemId).child("price").setValue(snapshot.child("price").getValue());
-                            }
-                            if (!TextUtils.isEmpty(description)) {
-                                databaseReference.child(userId).child(itemId).child("description").setValue(description);
-                            } else {
-                                databaseReference.child(userId).child(itemId).child("description").setValue(snapshot.child("description").getValue());
-                            }
-                            if (gender.equals("Choose Gender")) {
-                                databaseReference.child(userId).child(itemId).child("gender").setValue(snapshot.child("gender").getValue());
-                            } else {
-                                databaseReference.child(userId).child(itemId).child("gender").setValue(gender);
-                            }
-                            if (type.equals("Choose Clothe")) {
-                                databaseReference.child(userId).child(itemId).child("type").setValue(snapshot.child("type").getValue());
-                            } else {
-                                databaseReference.child(userId).child(itemId).child("type").setValue(type);
-                            }
-                            if (size.equals("Choose Size")) {
-                                databaseReference.child(userId).child(itemId).child("size").setValue(snapshot.child("size").getValue());
-                            } else {
-                                databaseReference.child(userId).child(itemId).child("size").setValue(size);
-                            }
-                            if (TextUtils.isEmpty(title)) {
-                                databaseReference.child(userId).child(itemId).child("title").setValue(snapshot.child("title").getValue());
-                            }
 
-                        });
-                    }
+
+                        }
+                    });
+
 
 
                     checkImageLinkFirebase.setOnBooleanChangeListener(new EditProduct.OnBooleanChangeListener() {
@@ -386,17 +436,7 @@ public class EditProduct extends Fragment {
                     });
 
 
-                    if (bitmap == null) {
-                        HomeFragment homeFragment = new HomeFragment();
-                        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
-                        fragmentTransaction.commit();
-                        ProcessPhoenix.triggerRebirth(requireContext());
-                        Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
-                    } else {
-                        storageReference.child("images/" + imgUUID).delete();
-                        uploadImage(dataToSend);
-                    }
+
 
                 } else {
                     Toast.makeText(getContext(), "No internet connexion", Toast.LENGTH_LONG).show();
