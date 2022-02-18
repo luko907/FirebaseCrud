@@ -38,9 +38,11 @@
                     android:id="@+id/idEDT_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:textColor="@color/white"
+                    android:textColorHint="@drawable/hint_touch"
                     android:textSize="@dimen/_14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -51,9 +53,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="32dp"
 
+                android:padding="16dp"
                 android:text="@string/upload_image"
                 android:textAllCaps="false"
-                android:padding="16dp"
                 app:cornerRadius="10dp"
                 app:layout_constraintBottom_toTopOf="@+id/idTI_typeDropdown"
                 app:layout_constraintEnd_toStartOf="@+id/idIMG_preview"
@@ -76,8 +78,6 @@
                 app:layout_constraintStart_toStartOf="@+id/idBTN_upload_image"
                 app:layout_constraintTop_toBottomOf="@+id/idBTN_upload_image"
                 app:layout_constraintVertical_bias="1.0" />
-
-
 
 
             <ImageView
@@ -200,6 +200,7 @@
                     android:importantForAutofill="no"
                     android:inputType="number"
                     android:textColor="@color/white"
+                    android:textColorHint="@drawable/hint_touch"
                     android:textSize="@dimen/_14sp" />
 
                 <TextView
@@ -237,6 +238,7 @@
                     android:minHeight="@dimen/_100dp"
                     android:scrollbars="vertical"
                     android:textColor="@color/white"
+                    android:textColorHint="@drawable/hint_touch"
                     android:textSize="@dimen/_14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -262,9 +264,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="@dimen/_32dp"
+                android:backgroundTint="#CC0C0C"
                 android:padding="16dp"
                 android:text="Cancel"
-                android:backgroundTint="#CC0C0C"
                 android:textAllCaps="false"
                 android:textSize="@dimen/_18sp"
                 app:cornerRadius="10dp"

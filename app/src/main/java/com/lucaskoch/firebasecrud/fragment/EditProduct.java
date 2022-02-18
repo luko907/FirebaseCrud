@@ -25,6 +25,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -44,6 +45,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -57,6 +59,7 @@ import com.google.firebase.storage.UploadTask;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.lucaskoch.firebasecrud.R;
 import com.lucaskoch.firebasecrud.model.ItemRVModel;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -69,6 +72,7 @@ import java.util.UUID;
 
 public class EditProduct extends Fragment {
     private TextInputEditText idEDT_title, idEDT_price, idEDT_description;
+    private TextInputLayout idTI_title,idTI_price,idTI_description;
     private TextView max_price;
     private ImageView idIMG_preview;
     private MaterialButton idBTN_upload_image, idBTN_accept,idBTN_cancel_img_preview,idBTN_cancel;
@@ -103,12 +107,17 @@ public class EditProduct extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
+
         randomUUID = UUID.randomUUID().toString();
         types = getResources().getStringArray(R.array.clothe_type);
         gender = getResources().getStringArray(R.array.gender);
         sizes = getResources().getStringArray(R.array.sizes);
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        idTI_title = view.findViewById(R.id.idTI_title);
+        idTI_price =view.findViewById(R.id.idTI_price);
+        idTI_description = view.findViewById(R.id.idTI_description);
+
         idEDT_title = view.findViewById(R.id.idEDT_title);
         idEDT_price = view.findViewById(R.id.idEDT_price);
         idBTN_cancel = view.findViewById(R.id.idBTN_cancel);
@@ -131,6 +140,38 @@ public class EditProduct extends Fragment {
         assert bundle != null;
         String imgUUID = bundle.getString("imgUUID");
         itemId = bundle.getString("itemId");
+
+
+
+        databaseReference.child(userId).child(itemId).get().addOnSuccessListener(shot -> {
+            Picasso.get().load(Objects.requireNonNull(shot.child("img").getValue()).toString()).into(idIMG_preview);
+            idBTN_cancel_img_preview.setVisibility(View.VISIBLE);
+            String titleTemp = Objects.requireNonNull(shot.child("title").getValue()).toString();
+            String priceTemp = Objects.requireNonNull(shot.child("price").getValue()).toString();
+            String descriptionTemp = Objects.requireNonNull(shot.child("description").getValue()).toString();
+            String genderTemp = Objects.requireNonNull(shot.child("gender").getValue()).toString();
+            String typeTemp = Objects.requireNonNull(shot.child("type").getValue()).toString();
+            String imgTemp = Objects.requireNonNull(shot.child("img").getValue()).toString();
+            String sizeTemp = Objects.requireNonNull(shot.child("size").getValue()).toString();
+            idTI_title.setHint("");
+            idTI_price.setHint("");
+            idTI_description.setHint("");
+            idEDT_title.setHint(Html.fromHtml("<i>" + titleTemp + "</i>"));
+            idEDT_price.setHint(Html.fromHtml("<i>" + priceTemp + "</i>"));
+            idEDT_description.setHint(Html.fromHtml("<i>" + descriptionTemp + "</i>"));
+            idACT_typeDropdown.setText(Html.fromHtml("<i>" + typeTemp + "</i>"));
+            idACT_genderDropdown.setText(Html.fromHtml("<i>" + genderTemp + "</i>"));
+            idACT_sizeDropdown.setText(Html.fromHtml("<i>" + sizeTemp + "</i>"));
+            ArrayAdapter<String> typeAdapter =
+                    new ArrayAdapter<>(getContext(), R.layout.drowdown_template, types);
+            idACT_typeDropdown.setAdapter(typeAdapter);
+            ArrayAdapter<String> genderAdapter =
+                    new ArrayAdapter<>(getContext(), R.layout.drowdown_template, gender);
+            idACT_genderDropdown.setAdapter(genderAdapter);
+            ArrayAdapter<String> sizeAdapter =
+                    new ArrayAdapter<>(getContext(), R.layout.drowdown_template, sizes);
+            idACT_sizeDropdown.setAdapter(sizeAdapter);
+        });
 
         idBTN_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,15 +221,7 @@ public class EditProduct extends Fragment {
             }
         });
 
-        ArrayAdapter<String> typeAdapter =
-                new ArrayAdapter<>(getContext(), R.layout.drowdown_template, types);
-        idACT_typeDropdown.setAdapter(typeAdapter);
-        ArrayAdapter<String> genderAdapter =
-                new ArrayAdapter<>(getContext(), R.layout.drowdown_template, gender);
-        idACT_genderDropdown.setAdapter(genderAdapter);
-        ArrayAdapter<String> sizeAdapter =
-                new ArrayAdapter<>(getContext(), R.layout.drowdown_template, sizes);
-        idACT_sizeDropdown.setAdapter(sizeAdapter);
+
 
         someActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -213,6 +246,7 @@ public class EditProduct extends Fragment {
                                 bitmap = resizeImage(bitmap, 600, true);
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, temp);
                                 dataToSend = temp.toByteArray();
+                                Log.v("Tag","dataToSend " + dataToSend);
                                 idIMG_preview.setImageBitmap(bitmap);
                                 idBTN_cancel_img_preview.setVisibility(View.VISIBLE);
                             } catch (IOException e) {
@@ -336,13 +370,20 @@ public class EditProduct extends Fragment {
                                     } else {
                                         databaseReference.child(userId).child(title.toLowerCase(Locale.ROOT)).child("size").setValue(size);
                                     }
+
                                     databaseReference.child(userId).child(itemId).removeValue();
-                                    HomeFragment homeFragment = new HomeFragment();
-                                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                                    fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
-                                    fragmentTransaction.commit();
-                                    ProcessPhoenix.triggerRebirth(requireContext());
-                                    Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                                    if (bitmap == null) {
+                                        HomeFragment homeFragment = new HomeFragment();
+                                        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                                        fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
+                                        fragmentTransaction.commit();
+                                        /* ProcessPhoenix.triggerRebirth(requireContext());*/
+                                        Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        storageReference.child("images/" + imgUUID).delete();
+                                        uploadImage(dataToSend);
+                                    }
+
                                 });
                             } else {
                                 databaseReference.child(userId).child(itemId).get().addOnSuccessListener(shot -> {
@@ -386,7 +427,7 @@ public class EditProduct extends Fragment {
                                     FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                                     fragmentTransaction.replace(R.id.frameLayout_fragment_container, homeFragment).addToBackStack(null);
                                     fragmentTransaction.commit();
-                                    ProcessPhoenix.triggerRebirth(requireContext());
+                                   /* ProcessPhoenix.triggerRebirth(requireContext());*/
                                     Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
                                 } else {
                                     storageReference.child("images/" + imgUUID).delete();
