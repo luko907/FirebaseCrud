@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/edit_item_swipe_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.EditProduct">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_shade_1">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/edit_product_constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/idTI_title"
+                style="@style/TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="8dp"
+                android:hint="@string/enter_title"
+                android:padding="@dimen/_5dp"
+                android:textColorHint="@color/hint_text_color"
+                app:hintTextColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/idIMG_preview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/idEDT_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@drawable/hint_touch"
+                    android:textSize="@dimen/_14sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/idBTN_upload_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+
+                android:padding="16dp"
+                android:text="@string/upload_image"
+                android:textAllCaps="false"
+                app:cornerRadius="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/idTI_typeDropdown"
+                app:layout_constraintEnd_toStartOf="@+id/idIMG_preview"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/idTI_title" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/idBTN_cancel_img_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="12dp"
+                android:backgroundTint="#7E7777"
+                android:text="Delete Image"
+                android:textSize="10sp"
+                android:visibility="gone"
+                app:cornerRadius="6dp"
+                app:layout_constraintBottom_toTopOf="@+id/idTI_typeDropdown"
+                app:layout_constraintEnd_toEndOf="@+id/idBTN_upload_image"
+                app:layout_constraintStart_toStartOf="@+id/idBTN_upload_image"
+                app:layout_constraintTop_toBottomOf="@+id/idBTN_upload_image"
+                app:layout_constraintVertical_bias="1.0" />
+
+
+            <ImageView
+                android:id="@+id/idIMG_preview"
+                android:layout_width="@dimen/_150dp"
+                android:layout_height="@dimen/_150dp"
+                android:layout_marginTop="@dimen/_16dp"
+                android:layout_marginBottom="@dimen/_16dp"
+                android:contentDescription="@string/inspect"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toTopOf="@+id/idTI_typeDropdown"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/idBTN_upload_image"
+                app:layout_constraintTop_toBottomOf="@+id/idTI_title" />
+
+            <com.google.android.material.textfield.TextInputLayout
+
+                android:id="@+id/idTI_typeDropdown"
+                style="@style/DropDown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:padding="@dimen/_5dp"
+                android:theme="@style/changeBackgroundColor"
+                app:layout_constraintBottom_toTopOf="@+id/idTI_genderDropdown"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/idIMG_preview">
+
+                <AutoCompleteTextView
+                    android:id="@+id/idACT_typeDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:importantForAutofill="no"
+                    android:inputType="none"
+                    android:padding="@dimen/_14sp"
+                    android:text="@string/choose_clothe"
+                    android:textColor="@color/hint_text_color"
+                    android:textColorHint="@color/white"
+                    android:textSize="@dimen/_14sp"
+                    tools:ignore="LabelFor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/idTI_genderDropdown"
+                style="@style/DropDown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5dp"
+                android:theme="@style/changeBackgroundColor"
+                app:layout_constraintBottom_toTopOf="@+id/idTI_sizeDropdown"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/idTI_typeDropdown">
+
+                <AutoCompleteTextView
+                    android:id="@+id/idACT_genderDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:importantForAutofill="no"
+                    android:inputType="none"
+                    android:padding="14dp"
+                    android:text="@string/choose_gender"
+                    android:textColor="@color/hint_text_color"
+                    android:textColorHint="@color/white"
+                    android:textSize="@dimen/_14sp"
+                    tools:ignore="LabelFor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/idTI_sizeDropdown"
+                style="@style/DropDown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5dp"
+                android:theme="@style/changeBackgroundColor"
+                app:layout_constraintBottom_toTopOf="@+id/idTI_price"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/idTI_genderDropdown">
+
+                <AutoCompleteTextView
+                    android:id="@+id/idACT_sizeDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:importantForAutofill="no"
+                    android:inputType="none"
+                    android:padding="@dimen/_14sp"
+                    android:text="@string/choose_size"
+                    android:textColor="@color/hint_text_color"
+                    android:textSize="@dimen/_14sp"
+                    tools:ignore="LabelFor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/idTI_price"
+                style="@style/TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_price"
+                android:padding="@dimen/_5dp"
+                android:textColorHint="@color/hint_text_color"
+                app:hintTextColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/idTI_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/idTI_sizeDropdown">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/idEDT_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    android:textColorHint="@drawable/hint_touch"
+                    android:textSize="@dimen/_14sp" />
+
+                <TextView
+                    android:id="@+id/max_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_6dp"
+                    android:layout_weight="1"
+                    android:text="@string/max_price_9999"
+                    android:textColor="#FD0000"
+                    android:visibility="gone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/idTI_description"
+                style="@style/TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_description"
+                android:minHeight="@dimen/_100dp"
+                android:padding="@dimen/_5dp"
+                android:textColorHint="@color/hint_text_color"
+                app:hintTextColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/idTI_price">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/idEDT_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine"
+                    android:minHeight="@dimen/_100dp"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/white"
+                    android:textColorHint="@drawable/hint_touch"
+                    android:textSize="@dimen/_14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <ProgressBar
+                android:id="@+id/idPB_progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:indeterminate="true"
+                android:indeterminateDrawable="@drawable/progress_back"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/idBTN_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="@dimen/_32dp"
+                android:backgroundTint="#CC0C0C"
+                android:padding="16dp"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_18sp"
+                app:cornerRadius="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/idTI_description" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/idBTN_accept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:padding="16dp"
+                android:text="Accept"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_18sp"
+                app:cornerRadius="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/idTI_description" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -1,3 +1,51 @@
 <resources>
     <string name="app_name">FirebaseCrud</string>
+    <string name="inspect">inspect</string>
+    <string name="enter_title"><i>Enter Title</i></string>
+    <string name="upload_image">Upload Image</string>
+    <string name="choose_clothe"><i>Choose Clothe</i></string>
+    <string name="choose_gender"><i>Choose Gender</i></string>
+    <string name="enter_size"><i>Enter Size</i></string>
+    <string name="enter_price"><i>Enter Price</i></string>
+    <string name="max_price_9999">Max Price 9999</string>
+    <string name="enter_description"><i>Enter Description</i></string>
+    <string name="add_item">Add Item</string>
+    <string name="enter_username"><i>Enter Username</i></string>
+    <string name="enter_your_password"><i>Enter Password</i></string>
+    <string name="login">Login</string>
+    <string name="new_user_register_here">New User? Register Here</string>
+    <string name="enter_user_name"><i>Enter Username</i></string>
+    <string name="confirm_your_password"><i>Confirm Password</i></string>
+    <string name="register">Register</string>
+    <string name="already_a_user_login_here">Already a User? Login Here</string>
+    <string name="registration">Registration</string>
+    <string name="choose_size"><i>Choose Size</i></string>
+    <string-array name="clothe_type">
+        <item>T-Shirt</item>
+        <item>Jean</item>
+        <item>Jacket</item>
+        <item>Sweater</item>
+        <item>Shoes</item>
+    </string-array>
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Kids</item>
+    </string-array>
+    <string-array name="jean_size">
+        <item>35</item>
+        <item>36</item>1
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+    </string-array>
+    <string-array name="sizes">
+        <item>S</item>
+        <item>L</item>
+        <item>XL</item>
+        <item>XXL</item>
+        <item>XXXL</item>
+    </string-array>
 </resources>

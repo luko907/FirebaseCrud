@@ -18,7 +18,15 @@
         <item name="boxStrokeColor"> #296D98</item>
         <item name="boxStrokeWidth">1dp</item>
     </style>
-
+    <style name="changeBackgroundColor"  parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="colorSurface">@color/blue_shade_1</item>
+    </style>
+    <style name="DropDown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor"> #296D98</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="endIconTint">@color/white</item>
+        <item name="endIconDrawable">@drawable/ic_baseline_keyboard_arrow_down_24</item>
+    </style>
     <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
 
         <item name="android:background">@drawable/round_drawable</item>

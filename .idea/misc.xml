@@ -3,13 +3,36 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/drawable/border_layout.xml" value="0.3769230769230769" />
         <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/drawable/custom_button_back.xml" value="0.3769230769230769" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/drawable/delete_button_back.xml" value="0.3769230769230769" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/drawable/hint_ontouch.xml" value="0.24583333333333332" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/drawable/hint_touch.xml" value="0.24583333333333332" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/drawable/ic_add.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_24.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/drawable/ic_launcher_background.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/drawable/product_detail_buttons.xml" value="0.3769230769230769" />
         <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/drawable/progress_back.xml" value="0.3769230769230769" />
         <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/drawable/round_drawable.xml" value="0.3769230769230769" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout-v28/fragment_home.xml" value="0.3625" />
         <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/activity_add_course.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/activity_edit_course.xml" value="0.35260416666666666" />
-        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/activity_login.xml" value="0.20520833333333333" />
-        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/activity_registration.xml" value="0.1" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/activity_login.xml" value="0.33" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/activity_main.xml" value="0.3625" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/activity_profile.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/activity_registration.xml" value="0.33" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/border_layout.xml" value="0.27355072463768115" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/clothe_rv_item.xml" value="0.34057971014492755" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/course_rv_item.xml" value="0.3625" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/drowdown_template.xml" value="0.3625" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/fragment_add_course.xml" value="0.29635416666666664" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/fragment_add_item.xml" value="0.34057971014492755" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/fragment_edit_product.xml" value="0.33" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/fragment_home.xml" value="0.34051724137931033" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/fragment_login.xml" value="0.3625" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/fragment_product_details.xml" value="0.383969465648855" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/layout/fragment_registration.xml" value="0.3625" />
+        <entry key="..\:/Users/Lucas/Documents/Code/Henry/Android/FirebaseCrud/app/src/main/res/menu/main_menu.xml" value="0.3223958333333333" />
       </map>
     </option>
   </component>
